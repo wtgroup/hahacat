@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+						http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/data/jpa
+						http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        整合c3p0连接池
+    -->
+    <!--1. 准备连接池配置参数(properties文件)-->
+    <!--2. 读取配置文件-->
+    <context:property-placeholder location="classpath:jdbc.mysql.properties"/>
+    <!--3. 配置生成c3p0bean, 引入读取的配置参数-->
+    <bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.mysql.driverClass}"/>
+        <property name="jdbcUrl" value="${jdbc.mysql.jdbcUrl}"/>
+        <property name="user" value="${jdbc.mysql.user}"/>
+        <property name="password" value="${jdbc.mysql.password}"/>
+    </bean>
+
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        spring整合JPA  配置jpa的工厂
+    -->
+    <bean name="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+
+        <!--引入外部dataSource, 替换原有的四项参数-->
+        <property name="dataSource" ref="dataSource"/>
+
+        <!--指定持久层提供者  hibernate-->
+        <property name="persistenceProvider">
+            <bean class="org.hibernate.ejb.HibernatePersistence"/>
+        </property>
+
+        <!--JPA提供者适配器
+        => 用来适配不同JPA提供者 可见spring不止打算只封装hibernate一家jpa技术-->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <!-- 自动建表 -->
+                <property name="generateDdl" value="true"/>
+                <property name="showSql" value="true"/>
+
+                <!--指定具体的数据库-->
+                <property name="database" value="MYSQL"/>
+                <!--<property name="databasePlatform" value="org.hibernate.dialect.Oracle10gDialect"/>-->
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>  <!--MySQLInnoDBDialect-->
+            </bean>
+        </property>
+
+        <!--指定JPA方言
+        !EntityManager本身没有这个属性, 而是继承父类AbstractEntityManagerFactoryBean的
+        setJpaDialect(JpaDialect jpaDialect)将这个属性设置给了父类, 供父类的方法使用!-->
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+
+
+        <!-- 扫描实体类所在的包 -->
+        <property name="packagesToScan" value="com.wtgroup.domain.entity"/>
+
+</bean>
+
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        配置spring的事务管理器  (不再使用hibernate的事务管理器)
+    -->
+    <!--配置hibernate事务管理者-->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!--
+        开启事务注解支持
+    -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+    <!--
+        开启注解
+    -->
+    <!-- 组件扫描 @Server @Controller @Repository 不用管domain, 因为domain已经让jpa管理了-->
+    <!--每个层单独配置分applicationContext.xml文件, 只管自己模块里的包扫描-->
+    <!--<context:component-scan base-package="com.sykd.bos.service, .."/>-->
+
+
+    <!-- 整合 spring data jpa
+        有了这个, 只需要在dao层用结合继承内置父类和注解的方式实现简化数据库操作-->
+    <!--<jpa:repositories base-package="com.sykd.bos.dao"/>-->
+
+
+
+
+</beans>
