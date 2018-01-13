@@ -12,6 +12,7 @@
         <sourceRoots>
           <root url="file://$MODULE_DIR$/src/main/java" />
           <root url="file://$MODULE_DIR$/src/main/resources" />
+          <root url="file://$MODULE_DIR$/src/main/webapp" />
         </sourceRoots>
       </configuration>
     </facet>
@@ -26,7 +27,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/webapp" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -34,6 +35,7 @@
     <orderEntry type="module" module-name="java-service" />
     <orderEntry type="module" module-name="java-dao" />
     <orderEntry type="module" module-name="java-domain" />
+    <orderEntry type="module" module-name="hahacat-utils" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-all:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-guice:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-core:1.2.2" level="project" />
@@ -164,5 +166,7 @@
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-util:0.26.4" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-ext-tables:0.26.4" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-formatter:0.26.4" level="project" />
+    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.11.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.2" level="project" />
   </component>
 </module>

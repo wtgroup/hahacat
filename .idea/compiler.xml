@@ -6,14 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="demo" />
         <module name="hahacat-utils" />
         <module name="hahacat-web" />
         <module name="java-dao" />
         <module name="java-domain" />
         <module name="java-service" />
+        <module name="pcddatahelper" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="demo" target="1.7" />
       <module name="hahacat" target="1.7" />
       <module name="hahacat-java" target="1.7" />
       <module name="hahacat-utils" target="1.7" />
@@ -21,6 +24,7 @@
       <module name="java-dao" target="1.7" />
       <module name="java-domain" target="1.7" />
       <module name="java-service" target="1.7" />
+      <module name="pcddatahelper" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

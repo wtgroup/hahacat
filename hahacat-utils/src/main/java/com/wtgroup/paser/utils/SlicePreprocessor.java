@@ -1,5 +1,7 @@
 package com.wtgroup.paser.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.lang.reflect.Method;
 
 /**
@@ -18,7 +20,8 @@ public abstract class SlicePreprocessor {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             // 当前方法以传入的MarkdownSlice类型后缀, 就是要调用它
-            if (method.getName().toLowerCase().endsWith(suffix)) {
+
+            if (StringUtils.endsWithIgnoreCase(method.getName(), suffix)) {
                 m = method;
                 break;
             }

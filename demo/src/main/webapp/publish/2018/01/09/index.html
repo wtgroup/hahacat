@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>highchart演示</title>
+    <script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
+    <!--Highcharts-->
+    <script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <script type="text/javascript">
+        // 定义配置项
+        // 图表配置
+        var options = {
+            chart: {
+                type: 'bar'         // 对应的 column(柱形图)  \\  指定图表的类型，默认是折线图（line）
+            },
+            title: {
+                text: '我的第一个图表'                 // 标题
+            },
+            xAxis: {
+                categories: ['苹果', '香蕉', '橙子']   // x 轴分类(显示的时候默认在纵轴)
+            },
+            yAxis: {
+                title: {
+                    text: '吃水果个数'                // y 轴标题
+                }
+            },
+            series: [{                              // 数据列
+                name: '小明',                        // 数据列名
+                data: [1, 0, 4]                     // 数据
+            }, {
+                name: '小红',
+                data: [5, 7, 3]
+            }]
+        };
+
+        var options2 = {
+            chart:{
+                type:''
+            },
+            title:{
+                text:'散点图'
+            },
+            series:[{
+                name:'啤酒',
+                lineWidth:0,        // 隐藏线条即可得到散点图
+                data:[ [5, 2], [6,3], [8,2],[10,4] ]
+            }],
+            yAxis:{
+                title:{
+                    text:'尿布'
+                }
+            },
+            xAxis:{
+                title:{
+                    text:'啤酒'
+                }
+            }
+        }
+
+
+    </script>
+
+
+</head>
+<body>
+
+<hr/>
+
+<div id="container" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    // highchart构造方式
+    // 1.直接写id  2.renderTo  3.选择器
+    /// 注意: 初始化的位置, 需要在容器加载后, 才能引用
+    var charts = Highcharts.chart('container', options);
+
+</script>
+
+
+<hr/>
+<div id="container2" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    var charts2 = Highcharts.chart('container2', options2);
+</script>
+
+<hr>
+<a href="https://www.hcharts.cn/">官网: https://www.hcharts.cn/</a>
+
+</body>
+</html>

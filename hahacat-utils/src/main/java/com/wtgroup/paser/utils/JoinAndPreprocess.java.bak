@@ -1,0 +1,77 @@
+package com.wtgroup.paser.utils;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
+import TextSlice;
+
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * 继承Joiner, 针对自定义的MarkdownSlice类型的集合进行拼接. 针对不同的slice类型, 可以调用MarkdownSlicePreprocessor进行特殊预处理. 如, 代码块可以直接转成了html.
+ *
+ * @version:
+ * @author: Nisus-Liu
+ * @email: liuhejunlj@163.com
+ * @date: 2017-12-19-0:36
+ */
+public class JoinAndPreprocess {
+
+    private final Joiner joiner;
+    private final String separator;
+    private MarkdownSlicePreprocessor mdsp;
+
+    /**
+     * @param mdsp Markdown预处理器
+     * @param separator
+     */
+    public JoinAndPreprocess(MarkdownSlicePreprocessor mdsp, String separator) {
+        this.separator = separator;
+        this.mdsp = mdsp;
+        joiner = Joiner.on(separator);
+
+    }
+
+    /**
+     * 将md各个片段拼接成HTML字符串, 连接符一般由指定的本地的换行符.
+     * @param slices
+     * @return
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws IOException
+     */
+    public Serializable join(List<?> slices) throws InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
+        return appendTo(new StringBuffer(), slices).toString();
+    }
+
+
+    public <A extends Appendable> A appendTo(A appendable, Iterable<?> parts) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Preconditions.checkNotNull(appendable);
+        Iterator<?> iterator = parts.iterator();
+        if (iterator.hasNext()) {
+            Object next = iterator.next();
+            // 自定义适配
+            if (next instanceof TextSlice){
+                next = mdsp.preprocess((TextSlice) next);
+            }
+            appendable.append(next.toString());
+
+            while(iterator.hasNext()) {
+                appendable.append(this.separator);
+                Object next1 = iterator.next();
+                if (next1 instanceof TextSlice) {
+                    next1 = mdsp.preprocess((TextSlice) next1);
+                }
+                appendable.append(next1.toString());
+            }
+        }
+
+        return appendable;
+    }
+
+}

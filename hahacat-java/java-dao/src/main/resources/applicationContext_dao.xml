@@ -17,10 +17,6 @@
 						http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
 
-<!--
-        引入父配置
-    -->
-    <import resource="classpath*:applicationContext.xml"/>
 
     <!--
         开启扫描  扫描模块里的相应的对象
@@ -32,7 +28,7 @@
         整合 spring data jpa
     -->
     <!--有了这个, 只需要在dao层用结合继承内置父类和注解的方式实现简化数据库操作-->
-    <jpa:repositories base-package="com.wtgroup.dao"/>
+    <!--<jpa:repositories base-package="com.wtgroup.dao"/>-->
 
 
 

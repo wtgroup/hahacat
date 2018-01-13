@@ -18,6 +18,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="java-dao" />
     <orderEntry type="module" module-name="java-domain" />
+    <orderEntry type="module" module-name="hahacat-utils" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-all:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-guice:1.2.2" level="project" />
@@ -147,5 +148,7 @@
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-util:0.26.4" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-ext-tables:0.26.4" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-formatter:0.26.4" level="project" />
+    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.11.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.2" level="project" />
   </component>
 </module>

@@ -16,10 +16,7 @@
 	
 	
 
-	<!--
-		引入dao层配置
-	-->
-	<import resource="classpath*:applicationContext_dao.xml"/>
+
 
 	<!--
         开启扫描  扫描service模块里的相应的对象

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/hahacat.iml" filepath="$PROJECT_DIR$/hahacat.iml" />
       <module fileurl="file://$PROJECT_DIR$/hahacat-java/hahacat-java.iml" filepath="$PROJECT_DIR$/hahacat-java/hahacat-java.iml" />
       <module fileurl="file://$PROJECT_DIR$/hahacat-utils/hahacat-utils.iml" filepath="$PROJECT_DIR$/hahacat-utils/hahacat-utils.iml" />
@@ -9,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/hahacat-java/java-dao/java-dao.iml" filepath="$PROJECT_DIR$/hahacat-java/java-dao/java-dao.iml" />
       <module fileurl="file://$PROJECT_DIR$/hahacat-java/java-domain/java-domain.iml" filepath="$PROJECT_DIR$/hahacat-java/java-domain/java-domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/hahacat-java/java-service/java-service.iml" filepath="$PROJECT_DIR$/hahacat-java/java-service/java-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcddatahelper/pcddatahelper.iml" filepath="$PROJECT_DIR$/pcddatahelper/pcddatahelper.iml" />
     </modules>
   </component>
 </project>

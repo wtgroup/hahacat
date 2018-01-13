@@ -16,6 +16,9 @@
           <element id="archive" name="java-domain-1.0-SNAPSHOT.jar">
             <element id="module-output" name="java-domain" />
           </element>
+          <element id="archive" name="hahacat-utils-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="hahacat-utils" />
+          </element>
           <element id="library" level="project" name="Maven: org.apache.shiro:shiro-all:1.2.2" />
           <element id="library" level="project" name="Maven: org.apache.shiro:shiro-guice:1.2.2" />
           <element id="library" level="project" name="Maven: org.apache.shiro:shiro-core:1.2.2" />
@@ -143,6 +146,8 @@
           <element id="library" level="project" name="Maven: com.vladsch.flexmark:flexmark-util:0.26.4" />
           <element id="library" level="project" name="Maven: com.vladsch.flexmark:flexmark-ext-tables:0.26.4" />
           <element id="library" level="project" name="Maven: com.vladsch.flexmark:flexmark-formatter:0.26.4" />
+          <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.11.2" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">
