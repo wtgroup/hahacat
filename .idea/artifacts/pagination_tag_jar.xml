@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pagination-tag:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/pagination_tag_jar</output-path>
+    <root id="archive" name="pagination-tag.jar">
+      <element id="module-output" name="pagination-tag" />
+    </root>
+  </artifact>
+</component>

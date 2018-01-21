@@ -6,6 +6,7 @@
     <file url="file://$PROJECT_DIR$/hahacat-java/java-domain" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hahacat-java/java-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/hahacat-utils" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hahacat-utils/pcddatahelper" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

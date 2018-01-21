@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wtgroup.mapper.OrdersCustomMapper">
+    <!--<select id="findOne" parameterType="User" resultType="User">-->
+    <!--SELECT * from user where id=#{id} or username=#{username}-->
+    <!--</select>-->
+    <sql id="query_orders_where">
+        <where>
+            <if test="ordersCustom != null and ordersCustom.number != null">
+                `number` like "%"#{ordersCustom.number}"%"
+            </if>
+        </where>
+    </sql>
+    <resultMap id="OrdersCustom" type="OrdersCustom">
+        <result column="user_id" property="userId"/>
+    </resultMap>
+
+
+    <!--根据订单编号查询订单列表信息-->
+    <!--要求: 如果输入编号有效(有对应的记录)则获取对应记录, 否则查询所有-->
+    <select id="queryOrdersByVo" parameterType="QueryVo" resultMap="OrdersCustom">
+        SELECT * FROM orders
+        <include refid="query_orders_where"/>
+    </select>
+
+
+
+    <!--
+    批量更新  一条SQL搞定
+    updateInBatchAndSelectiveById-->
+    <update id="updateInBatchAndSelectiveById" parameterType="list">
+        update orders
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="user_id =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.userId!=null">
+                        when id=#{i.id} then #{i.userId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="number =case" suffix="end,">
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.number!=null">
+                        when id=#{i.id} then #{i.number}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="createtime =case" suffix="end," >
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.createtime!=null">
+                        when id=#{i.id} then #{i.createtime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="note =case" suffix="end," >
+                <foreach collection="list" item="i" index="index">
+                    <if test="i.note!=null">
+                        when id=#{i.id} then #{i.note}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="i" index="index" >
+            id=#{i.id}
+        </foreach>
+    </update>
+
+
+
+    <!--根据主键查询所有-->
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="OrdersCustom">
+        SELECT * FROM orders WHERE id=#{id}
+    </select>
+
+</mapper>

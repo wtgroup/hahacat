@@ -27,6 +27,8 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/pcddatahelper/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/demo-mybatis-spring_RE/pom.xml" />
       </list>
     </option>
   </component>

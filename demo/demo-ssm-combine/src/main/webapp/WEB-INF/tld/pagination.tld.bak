@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+	<tlib-version>2.0</tlib-version>
+	<jsp-version>1.2</jsp-version>
+	<short-name>common</short-name>
+	<uri>http://WTGroup.cn/common/</uri>
+	<display-name>common Tag</display-name>
+	<description>common Tag library</description>
+
+	<!--定义page标签-->
+	<tag>
+		<name>page</name>
+		<tag-class>com.wtgroup.comb.utils.PaginationTag4Bootstrap</tag-class>
+		<body-content>JSP</body-content>
+		<description>create navigation for paging</description>
+		<attribute>
+			<name>pageBeanName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>number</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>url</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

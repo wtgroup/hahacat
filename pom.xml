@@ -12,7 +12,7 @@
         <module>hahacat-java</module>
         <module>hahacat-web</module>
         <module>hahacat-utils</module>
-        <module>demo</module>
+        <!--<module>demo</module>-->
     </modules>
 
 
