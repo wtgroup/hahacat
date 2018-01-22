@@ -40,6 +40,7 @@
         <module>demo-mywebapp</module>
         <module>demo-ssm-combine</module>
         <module>demo-lucene</module>
+        <module>demo-solr</module>
     </modules>
 
     <!--<build>-->
