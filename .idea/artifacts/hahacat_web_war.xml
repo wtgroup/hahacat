@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="hahacat-web:war">
-    <output-path>$PROJECT_DIR$/hahacat-web/target</output-path>
-    <root id="archive" name="hahacat-web-1.0-SNAPSHOT.war">
-      <element id="artifact" artifact-name="hahacat-web:war exploded" />
-    </root>
-  </artifact>
-</component>

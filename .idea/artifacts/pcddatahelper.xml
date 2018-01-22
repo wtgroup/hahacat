@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="pcddatahelper">
-    <output-path>$PROJECT_DIR$/out/artifacts/pcddatahelper</output-path>
-    <root id="archive" name="pcddatahelper.jar">
-      <element id="module-output" name="pcddatahelper" />
-      <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
-    </root>
-  </artifact>
-</component>

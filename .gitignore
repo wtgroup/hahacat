@@ -35,10 +35,6 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# Intellij
-*.iml
-*/*.iml
-
 # Keystore files
 #*.jks
 #gradle wrapper
@@ -56,6 +52,7 @@ unused.txt
 */.idea/
 .idea/
 *.iml
+*/*.iml
 *.ipr
 *.iws
 out
