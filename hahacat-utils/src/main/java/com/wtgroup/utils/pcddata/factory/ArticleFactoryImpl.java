@@ -5,7 +5,6 @@ import com.wtgroup.utils.pcddata.commons.InstanceGetter;
 import com.wtgroup.utils.pcddata.integrate.TemplateIntegrator;
 import com.wtgroup.utils.pcddata.entity.Markdown;
 import com.wtgroup.utils.pcddata.entity.Article;
-import com.wtgroup.pcddata.paser.utils.*;
 import com.wtgroup.utils.pcddata.paser.utils.*;
 
 import java.io.File;

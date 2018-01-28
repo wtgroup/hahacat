@@ -32,10 +32,12 @@
     <properties>
         <lucene.version>4.10.3</lucene.version>
         <commons-io.version>2.5</commons-io.version>
+        <ikanalyzer.version>2012_u6</ikanalyzer.version>
     </properties>
-    <dependencies>
-        <!--//控制版本号-->
+    <!--//控制版本号-->
 
+
+    <dependencies>
         <!--Lucene相关-->
         <!-- lucene-core -->
         <dependency>
@@ -74,7 +76,7 @@
         <dependency>
             <groupId>com.janeluo</groupId>
             <artifactId>ikanalyzer</artifactId>
-            <version>2012_u6</version>
+            <version>${ikanalyzer.version}</version>
         </dependency>
 
     </dependencies>

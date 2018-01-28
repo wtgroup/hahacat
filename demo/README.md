@@ -13,3 +13,6 @@ ssm框架综合练习
 
 ## demo/demo-lucene
 Lucene演示
+
+## demo/demo-note
+做笔记的module.

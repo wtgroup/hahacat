@@ -7,11 +7,11 @@
 	<context id="testTables" targetRuntime="MyBatis3">
 		<commentGenerator>
 			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
-			<property name="suppressAllComments" value="false" />
+			<property name="suppressAllComments" value="true" />
 		</commentGenerator>
 		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:3306/hhcat-demo" userId="root"
+			connectionURL="jdbc:mysql://localhost:3306/hhcat_blog" userId="root"
 			password="88">
 		</jdbcConnection>
 		<!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver"
@@ -27,7 +27,7 @@
 		</javaTypeResolver>
 
 		<!-- targetProject:生成PO类的位置 -->
-		<javaModelGenerator targetPackage="com.wtgroup.bean"
+		<javaModelGenerator targetPackage="com.wtgroup.blog.entity"
 			targetProject="src">
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="false" />
@@ -35,22 +35,27 @@
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
         <!-- targetProject:mapper映射文件生成的位置 -->
-		<sqlMapGenerator targetPackage="com.wtgroup.mapper"
+		<sqlMapGenerator targetPackage="com.wtgroup.blog.mapper"
 			targetProject=".\src">
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="false" />
 		</sqlMapGenerator>
 		<!-- targetPackage：mapper接口生成的位置 -->
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.wtgroup.mapper"
+			targetPackage="com.wtgroup.blog.mapper"
 			targetProject=".\src">
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
 		<!-- 指定数据库表 -->
-		<table schema="" tableName="user"></table>
-		<table schema="" tableName="orders"></table>
-		
+		<table schema="" tableName="t_article"></table>
+		<table schema="" tableName="t_comment"></table>
+		<table schema="" tableName="t_category"></table>
+		<table schema="" tableName="t_resource"></table>
+		<table schema="" tableName="t_param"></table>
+		<table schema="" tableName="t_user"></table>
+		<table schema="" tableName="t_user_log"></table>
+
 		<!-- 有些表的字段需要指定java类型-->
 		 <!--<table schema="" tableName="user">-->
 			<!--<columnOverride column="id" javaType="Long"  />-->

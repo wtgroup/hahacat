@@ -41,6 +41,8 @@
         <module>demo-ssm-combine</module>
         <module>demo-lucene</module>
         <module>demo-solr</module>
+        <module>demo-note</module>
+        <module>demo-jdsearch</module>
     </modules>
 
     <!--<build>-->

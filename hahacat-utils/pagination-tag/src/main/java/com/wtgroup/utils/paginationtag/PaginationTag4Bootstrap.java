@@ -160,6 +160,7 @@ public class PaginationTag4Bootstrap extends TagSupport {
     @SuppressWarnings("rawtypes")
     private String resolveUrl(String url, javax.servlet.jsp.PageContext pageContext) throws JspException {
         //UrlSupport.resolveUrl(url, context, pageContext)
+        /*将上次请求的参数全部拿出来拼接到url中, 以便点击分页按钮时上次的参数不会丢失*/
         //获取Request中参数map
         Map params = pageContext.getRequest().getParameterMap();
         for (Object key : params.keySet()) {
