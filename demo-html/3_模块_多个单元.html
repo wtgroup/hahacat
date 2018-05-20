@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/Trees.js"></script>
+
+    <script>
+        console.log(Trees);
+        //        var BroadLeafTree = Trees.BroadLeafTree;
+        //        var NeedleTree = Trees.NeedleTree;
+        //
+        //        var fengshu = new BroadLeafTree('枫树',100,8,6);
+        //        console.log(fengshu);
+
+        var AbstractTree = Trees.AbstractTree;
+        var BroadLeafTree = Trees.BroadLeafTree;
+        var NeedleTree = Trees.NeedleTree;
+        //        var huaishu = new AbstractTree('槐树');
+        //        console.log(huaishu);
+        //        console.log(huaishu.getName());
+        //        console.log(huaishu.name);  //=> undefined
+        var fengshu = new BroadLeafTree('枫树', 100, 8, 6);
+        console.log(fengshu instanceof AbstractTree);
+        console.log(fengshu instanceof BroadLeafTree);
+        console.log(">>>fengshu");
+        console.log(fengshu);
+
+        var maweisong = new NeedleTree('马尾松');
+        console.log(maweisong instanceof AbstractTree);
+        console.log(maweisong instanceof NeedleTree);
+        console.log(">>>maweisong");
+        console.log(maweisong);
+
+        console.log(fengshu.getName());
+        //console.log(maweisong.getName());   //报错,因为没有继承AbstractTree  Uncaught TypeError: maweisong.getName is not a function
+
+
+
+    </script>
+
+</head>
+
+<body>
+
+
+</body>
+</html>

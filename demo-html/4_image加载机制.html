@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="dev-imgbox/css/imgbox.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/imgbox.js"></script>
+
+
+
+</head>
+
+<body>
+
+<img  onclick="showMax('image/3793633099_4f9c3e08b3_m.jpg')"  src="image/3793633099_4f9c3e08b3_m.jpg" style="width:288px;height:216px;" />
+<div id="Cover_Div" onClick="hideMax()">div div div</div>   <!--遮罩层-->
+
+
+
+
+<div id="clone_div"></div>
+<hr>
+<div id="clone_div2"></div>
+
+</body>
+<script>
+    /*
+    *
+    * 结论: 构造image对象时, 同样的srtc不会重新加载了*/
+
+    var $img = $('<img id="clone" title="人脸识别-1" src="http://182.92.176.35:9006/ossFile/download.do?fileId=5ac2e409-109b-4e55-8889-5ee688e70a12">')
+    $('#clone_div').append($img);
+    //test: 追加统一个img对象会发心情求吗?
+    $('#clone_div').append($img);       //多次追加只会有一个
+
+    $('#clone_div2').append($img);
+
+    //复制一个src, 会重新加在吗?
+    setTimeout(function () {
+        var cloneImg = new Image();
+        cloneImg.src = $img.attr('src');
+        console.log(cloneImg);
+        $('#clone_div').append($(cloneImg));
+    }, 60000);
+
+
+
+
+
+
+
+</script>
+</html>

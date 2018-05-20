@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG1.1//EN"
+        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="500" height="500"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Cat</title>
+    <desc>Stick Figure of a Cat</desc>
+    <!--在这里绘制图像 -->
+    <circle r="50" cx="100" cy="100" style="stroke: blue;fill:none"></circle>
+    <circle r="5" cx="80" cy="75" stroke="black" fill="#339933"></circle>
+    <circle r="5" cx="120" cy="75" stroke="black" fill="#339933"></circle>
+    <!--whiskers-->
+    <g id="whiskers">
+        <line x1="110" y1="100" x2="165" y2="90" style="stroke: black"></line>
+        <line x1="110" y1="100" x2="165" y2="110" style="stroke: black"></line>
+    </g>
+    <!--
+    1.引入另一个xmlns xlink
+    2.坐标反转
+    3.原始坐标-200, 再乘以-1  i.e. 先执行translate, 再执行scale -->
+    <use xlink:href="#whiskers" transform="scale(-1 1) translate(-200 0)"></use>
+    <!--耳朵-->
+    <!--空格和,随意-->
+    <polyline transform="translate(30,5)" points="108, 62, 90, 10, 70 45, 50, 10, 32, 62" style="stroke: black;fill: none;"></polyline>
+    <!--嘴巴-->
+    <polyline transform="translate(30,5)" points="35 110, 45 120, 95 120, 105, 110" style="stroke: black; fill: none;" />
+    <!--鼻子-->
+    <!--A -elliptical Arc-->
+    <!--大写表示绝对定位，小写表示相对定位-->
+    <!--
+    A:{
+        1,2 -RX,RY指所在椭圆的半轴大小
+        3 -椭圆的X轴与水平方向顺时针方向夹角，可以想像成一个水平的椭圆绕中心点顺时针旋转XROTATION的角度。
+        4 -只有两个值，1表示大角度弧线，0为小角度弧线。
+        5 -只有两个值，确定从起点至终点的方向，1为顺时针，0为逆时针
+    }
+    -->
+    <path transform="translate(30,0)" d="M 75 90 L 65 90 A 5 10 0 0 0 75 90" style="stroke: black;fill: #ffcccc"></path>
+
+    <!--文本-->
+    <!--x,y指定了文本块的左下角位置-->
+    <!--带上stroke可以产生发光体的效果-->
+    <text x="50" y="170" style="font-family: sans-serif;font-size:14pt;stroke: yellow;fill:red">This is a Cat!</text>
+</svg>
+
+

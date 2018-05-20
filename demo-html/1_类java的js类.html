@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="lib/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/Person.js"></script>
+    <script>
+        var p = new Person('冯三',22,'male');
+        p.speak('风好大...');
+
+        console.log(Person._jsonReg);
+        console.log(Person.GOODMAN);
+        console.log(p.GOODMAN); //=> undefined, 实例无法访问类属性
+
+        console.log(p.toString());
+
+        //console.log(Person.parse('{name:冯三,age:22,sex,male}')); //Uncaught TypeError: 请传入一个json串
+        console.log(Person.parse('{"name":"冯三","age":22,"sex":"male"}'));
+
+
+    </script>
+</head>
+<body>
+
+
+
+</body>
+</html>
