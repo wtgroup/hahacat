@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/d3.js" charset="UTF-8"></script>
+
+</head>
+<body>
+
+</body>
+<script>
+    var svg = d3.select('body').append('svg').attr('width',1500).attr('height',500);
+    var xScale = d3.scale.linear().domain([0, 10]).range([0, 300]);
+    var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+    var g = svg.append("g").attr("class", "axis").attr("transform", "translate(50,200)").call(xAxis);//坐标轴的定义域发生了变化xScale.domain([0,50]);
+
+
+    xScale.domain([0,100]).range([0,500]);
+
+    g.transition().duration(2000).call(xAxis);
+
+</script>
+</html>

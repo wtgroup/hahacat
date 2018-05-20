@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="js/d3.v3.min.js" charset="UTF-8"></script>-->
+    <script src="js/d3.js" charset="UTF-8"></script>
+    <!--<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
+
+</head>
+<body>
+
+
+</body>
+<script>
+    /*
+    * 纵轴上半轴为0°, 顺时针旋转, 角度增大
+    *
+    * 弦弧的起始弧中间的连接弧, 应该是某种贝塞尔曲线
+    *
+    * */
+    var width = 400;
+    var height = 400;
+    var svg = d3.select('body').append('svg')
+        .attr('width',width)
+        .attr('height',height);
+    //准备数据
+    var dataset = {
+        startArc: {
+            start: 0,
+            end: Math.PI * 0.5,
+            radius: 100
+        },
+        endArc: {
+            start: Math.PI * 1,
+            end: Math.PI * 1.5,
+            radius: 100
+        }
+    };
+
+    var chord = d3.svg.chord()
+        .source(function (d) {
+            //指定 其实用的对象
+            return d.startArc;
+        })
+        .target(function (d) {
+            return d.endArc;
+        })
+        .radius(function (d) {
+            return d.radius;
+        })
+        .startAngle(function (d) {
+            return d.start;
+        })
+        .endAngle(function (d) {
+            return d.end;
+        });
+
+    //添加路径
+    svg.append("path")
+        .attr("d", chord(dataset))
+        .attr("transform", "translate(200,200)")
+        .attr("fill", "yellow")
+        .attr("stroke", "black")
+        .attr("stroke-width", 3);
+
+
+    //-- 2 --
+    var width = 400;
+    var height = 400;
+    var svg = d3.select('body').append('svg')
+        .attr('width',width)
+        .attr('height',height);
+    //准备数据
+    var dataset = {
+        startArc: {
+            start: 0,
+            end: Math.PI * 0.5,
+            radius: 100
+        },
+        endArc: {
+            start: Math.PI * 1.5,
+            end: Math.PI * 1.5,
+            radius: 100
+        }
+    };
+
+    var chord = d3.svg.chord()
+        .source(function (d) {
+            //指定 其实用的对象
+            return d.startArc;
+        })
+        .target(function (d) {
+            return d.endArc;
+        })
+        .radius(function (d) {
+            return d.radius;
+        })
+        .startAngle(function (d) {
+            return d.start;
+        })
+        .endAngle(function (d) {
+            return d.end;
+        });
+
+    //添加路径
+    svg.append("path")
+        .attr("d", chord(dataset))
+        .attr("transform", "translate(200,200)")
+        .attr("fill", "yellow")
+        .attr("stroke", "black")
+        .attr("stroke-width", 3);
+
+
+    //-- 3 --
+    var width = 400;
+    var height = 400;
+    var svg = d3.select('body').append('svg')
+        .attr('width',width)
+        .attr('height',height);
+    //准备数据
+    var dataset = {
+        startArc: {
+            start: 0,
+            end: Math.PI * 0.5,
+            radius: 100
+        },
+        endArc: {
+            start: Math.PI * 0.55,
+            end: Math.PI * 1.5,
+            radius: 100
+        }
+    };
+
+    var chord = d3.svg.chord()
+        .source(function (d) {
+            //指定 其实用的对象
+            return d.startArc;
+        })
+        .target(function (d) {
+            return d.endArc;
+        })
+        .radius(function (d) {
+            return d.radius;
+        })
+        .startAngle(function (d) {
+            return d.start;
+        })
+        .endAngle(function (d) {
+            return d.end;
+        });
+
+    //添加路径
+    svg.append("path")
+        .attr("d", chord(dataset))
+        .attr("transform", "translate(200,200)")
+        .attr("fill", "yellow")
+        .attr("stroke", "black")
+        .attr("stroke-width", 3);
+</script>
+
+</html>
