@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="js/d3.v3.min.js" charset="UTF-8"></script>-->
+    <script src="js/d3.js" charset="UTF-8"></script>
+    <!--<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
+    <style>
+        .axis path, .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font-family: sans-serif;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+
+</body>
+<script>
+    var svg = d3.select('body').append('svg');
+    //准备数据
+    var lines = [80, 120, 160, 200, 240, 280];
+    //创建一个线段生成器  调用数据集生成路径
+    var linePath = d3.svg.line()
+        .x(function (d) {
+            return d;
+        })
+        .y(function (d, i) {
+            return i % 2 == 0 ? 40 : 120;       //数据转换
+        });
+
+    //添加路径
+    svg.append("path").attr("d", linePath(lines))  //使用了线段生成器
+        .attr("stroke", "black")
+        .attr("stroke-width", "3px")
+        .attr("fill", "none");
+
+
+</script>
+
+</html>
