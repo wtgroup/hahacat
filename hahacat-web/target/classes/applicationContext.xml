@@ -120,7 +120,7 @@
     <!--
         站点工厂
     -->
-    <!--<bean name="siteFactory" class="com.wtgroup.factory.SiteFactoryImpl">-->
+    <!--<bean name="siteFactory" class="SiteFactoryImpl">-->
         <!--<property name="hhcatPropertiesLocation" value="classpath:hhcat.properties"/>-->
     <!--</bean>-->
 

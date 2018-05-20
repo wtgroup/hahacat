@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2018-01-18-3:03
  */
 public class MyExceptionResolver implements HandlerExceptionResolver {
-    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e) {
         ModelAndView mv = new ModelAndView();
         MyException myex;
         if (e instanceof MyException) {

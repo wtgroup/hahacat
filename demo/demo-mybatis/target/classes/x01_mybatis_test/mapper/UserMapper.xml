@@ -14,7 +14,7 @@
         <!--SELECT * FROM `user` WHERE id  = #{id}-->
     <!--</select>-->
 
-    <select id="findUserById" parameterType="x01_mybatis_test.bean.User" resultType="x01_mybatis_test.bean.User">
+    <select id="findUserById" parameterType="x01_mybatis_test.bean.User" resultType="x01_mybatis_test.pageBeanName.User">
         SELECT * FROM `user` WHERE id  = #{id}
     </select>
 

@@ -12,6 +12,8 @@
         <module>hahacat-java</module>
         <module>hahacat-web</module>
         <module>hahacat-utils</module>
+        <module>demo-hbase</module>
+        <module>demo-canal</module>
         <!--<module>demo</module>-->
     </modules>
 
