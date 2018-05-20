@@ -1,4 +1,4 @@
-package com.wtgroup.solrj.demo;
+package com.wtgroup.solrj.demo_solr;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -11,9 +11,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.print.Doc;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +30,8 @@ public class Demo {
     public void connectSolr( ){
         // 默认会走核1
 //        String baseUrl = "http://localhost:8080/solr";
-        String baseUrl = "http://localhost:8080/solr/collection1";
+//        String baseUrl = "http://localhost:8080/solr/collection1";
+        String baseUrl = "http://192.168.17.128:8080/solr/collection1";
         solrServer = new HttpSolrServer(baseUrl);
     }
 

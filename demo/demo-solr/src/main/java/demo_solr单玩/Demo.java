@@ -1,4 +1,4 @@
-package com.wtgroup.solrj.demo_solr;
+package demo_solr单玩;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -44,7 +44,7 @@ public class Demo {
 
         SolrInputDocument doc = new SolrInputDocument();
         doc.setField("id","add_test");
-        doc.setField("name","李冰冰");
+        doc.setField("name","范冰冰,李冰冰");
         solrServer.add(doc);
         solrServer.commit();
     }

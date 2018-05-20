@@ -23,7 +23,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) throws Exception {
         if (o instanceof HandlerMethod) {   //封装方法定义相关的信息,如类,方法,参数等.
             HandlerMethod handlerMethod = (HandlerMethod) o;
-            //获取方法的指定类型的注解
+            //获取方法的指定类型的注解  判断是否含有自定义注解: Security
             Security security = handlerMethod.getMethodAnnotation(Security.class);
             if (security == null) {
                 return true;    //没有security注解, 表明不需要拦截

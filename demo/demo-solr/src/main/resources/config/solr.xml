@@ -19,8 +19,13 @@
    		http://www.springframework.org/schema/task/spring-task-4.0.xsd
 		http://code.alibabatech.com/schema/dubbo        
 		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
-	
-	<!-- 加载spring其他的配置文件 -->
-	<import resource="classpath:config/*.xml"/>
+
+
+	<context:property-placeholder location="config/project.properties"/>
+
+	<bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+		<constructor-arg name="baseURL" value="${solr.server.1}"/>
+		<!--<constructor-arg value="http://localhost:8080/solr"/>-->
+	</bean>
 		
 </beans>

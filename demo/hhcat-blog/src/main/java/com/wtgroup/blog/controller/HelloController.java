@@ -2,6 +2,7 @@ package com.wtgroup.blog.controller;
 
 import com.wtgroup.blog.annotation.Security;
 import com.wtgroup.blog.controller.vo.TestVo;
+import com.wtgroup.blog.pojo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,9 +20,15 @@ import javax.validation.Valid;
 @Controller
 public class HelloController {
 
-    @RequestMapping(value={"index","/",""})
+    @RequestMapping(value={"index"})    //index.html也会拦截到
     public String home(Model model){
         model.addAttribute("user", "赵子龙");
+
+        //测试thymeleaf
+        User user = new User();
+        user.setName("李白_leaf");
+        model.addAttribute("user", user);
+
         return "index";
     }
 

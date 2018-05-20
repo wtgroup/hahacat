@@ -22,5 +22,7 @@
 	
 	<!-- 加载spring其他的配置文件 -->
 	<import resource="classpath:config/*.xml"/>
+
+
 		
 </beans>
