@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>-->
+    <script type="text/javascript" src="js/markdown.js"></script>
+
+
+</head>
+<body>
+<textarea id="text-input" oninput="this.editor.update()"
+          rows="6" cols="60">Type **Markdown** here.
+</textarea>
+<div id="preview"></div>
+<script>
+    function Editor(input, preview) {
+        this.update = function () {
+            preview.innerHTML = markdown.toHTML(input.value);
+        };
+        //!巧妙, 将Editor实例作为input的属性, 这样, input就可以很方便的调用Editor的update()方法了!
+        input.editor = this;
+        //创建编辑器后立马初始更新一次
+        this.update();
+    }
+
+    var $ = function (id) {
+        return document.getElementById(id);
+    };
+    new Editor($('text-input'), $("preview"));
+</script>
+</body>
+</html>
