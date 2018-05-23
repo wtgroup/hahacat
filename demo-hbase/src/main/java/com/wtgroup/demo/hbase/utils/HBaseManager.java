@@ -1,10 +1,5 @@
 package com.wtgroup.demo.hbase.utils;
 
-
-//import com.jfbank.bigdata.constant.Constant;
-//import com.jfbank.bigdata.exception.GlobalConf;
-//import com.jfbank.bigdata.exception.GlobalCustomException;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
@@ -23,23 +18,59 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * hbase管理者, 面向唯一的一个集群
+ *
  * @author Nisus Liu
- * @version 0.0.0
+ * @version 0.0.1
  * @email liuhejun108@163.com
- * @date 2018/5/17 12:44
+ * @date 2018/5/22 19:42
  */
-public class HBaseUtilSingleton {
+public class HBaseManager {
+    //TODO 暂设集群的唯一标识
+    private final String clusterId = "defaultClusterId";
+
     public static final String HBASE_ZOOKEEPER_QUORUM = "offlinenode3,offlinenode4,offlinenode5";
     public static final int HBASE_TABLE_REGION_NUM = 10;
     public static final String COMMA = ",";
     public static final String HIVE_SEP = "\\x01";
     public static final String DEFAULT_COLUMNFAMILY = "defaultColumnFamily";
+    public static final int SCAN_CACHING = 10000;                   //这只scan的缓存大小, 建议和记录条数同一数量级
 
     private static Logger LOG = LoggerFactory.getLogger(HBaseUtilSingleton.class);
     private static Configuration conf = null;
     private static Connection conn = null;
     private static ReadWriteLock rwlock = new ReentrantReadWriteLock();
     private static Lock wlock = rwlock.writeLock();
+
+
+    //存放本集群中的有可能要用到的列, 方便增删改的参数设置
+    public Set<HColumn> columns = new LinkedHashSet<>();
+
+
+    public HBaseManager addColumns(HColumn hColumn) {
+        columns.add(hColumn);
+
+        return this;
+    }
+
+    /**
+     * 传入一个pojo类, 根据getter/setter获取对应的字段, 再转换为hbase中的字段名风格(通常i.e. camel style->underline style)
+     * Note: 仅是为了方便于, `一个列族->一个pojo` 的场景.
+     * @param pojo
+     * @return
+     */
+    public HBaseManager addColumns(Class pojo, HColumn.ColumnFamily columnFamily) {
+        Set<String> fieldNames = FieldNameUtil.getFieldNames(pojo);
+        for (String f : fieldNames) {
+            //驼峰名->下划线风格, 加入 columns 中
+            HColumn hColumn = new HColumn(FieldNameUtil.underlineStyle(f));
+            columns.add(hColumn);
+        }
+
+        return this;
+    }
+
+
 
     public static Connection getConnection() {
         if (conn == null || conn.isClosed()) {
@@ -346,12 +377,12 @@ public class HBaseUtilSingleton {
      * Note: 限定了family范围
      *
      * @param tableName
-     * @param rowKeyLike
+     * @param rowKeyPrefix
      * @param familyAndColumnPairs ["family01,column01","family02,column02",...]
      * @return
      */
     public static List<Result> getRowsByPrefix(String tableName,
-                                               String rowKeyLike, List<String> familyAndColumnPairs,String startRow, String stopRow) {
+                                               String rowKeyPrefix, Set<HColumn> columns,String startRow, String stopRow) {
         Connection conn = getConnection();
         Table table = null;
         List<Result> list = new ArrayList<>();
@@ -360,18 +391,23 @@ public class HBaseUtilSingleton {
         try {
             long start = System.currentTimeMillis();
             table = conn.getTable(TableName.valueOf(tableName));
-            PrefixFilter filter = new PrefixFilter(rowKeyLike.getBytes());
+            PrefixFilter filter = new PrefixFilter(rowKeyPrefix.getBytes());
             Scan scan = new Scan();
             //设置cache
-            scan.setCaching(10000);
+            scan.setCaching(SCAN_CACHING);
             scan.setFilter(filter);
             scan.setStartRow(startRow.getBytes());
             scan.setStopRow(stopRow.getBytes());
-            for (String v : familyAndColumnPairs) {
-                String[] s = v.split(",");
-                LOG.debug("待查询列族: {}, 待查询列名: {}", s[0], s[1]);
-                scan.addColumn(Bytes.toBytes(s[0]), Bytes.toBytes(s[1]));       //family, column
+
+
+            for (HColumn column : columns) {
+                LOG.debug("待查询列族: {}, 待查询列名: {}", column.getColumnFamily().getName(), column.getName());
+                scan.addColumn(Bytes.toBytes(column.getColumnFamily().getName()), Bytes.toBytes(column.getName()));       //family, column
+
             }
+
+
+
 
             LOG.debug("即将开始scan查询");
             long startScan = System.currentTimeMillis();
@@ -381,19 +417,18 @@ public class HBaseUtilSingleton {
 
 
             long it0 = System.currentTimeMillis();
-//            for (Result result : scanner) {
-//                list.add(result);
-//            }
 
-            //结果打印
+            //结果集处理
 
             Iterator<Result> results = scanner.iterator();
 
-
-
-
             while (results.hasNext()) {
-                Result r = results.next();;
+                Result r = results.next();
+
+                for (HColumn column : columns) {
+
+                }
+
 
 
 //                String rowId = Bytes.toString(r.getRow());
@@ -475,5 +510,85 @@ public class HBaseUtilSingleton {
             }
         }
     }
-}
 
+
+
+
+
+    /**
+     * @author Nisus Liu
+     * @version 0.0.1
+     * @email liuhejun108@163.com
+     * @date 2018/5/22 19:28
+     */
+    public static class HColumn {
+
+        //列名
+        private String name;
+
+        //列值  用于存储hbase中获取的结果
+        private String value;
+
+        //所属列族
+        private ColumnFamily columnFamily;
+
+        public HColumn() {
+        }
+
+        public HColumn(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public HColumn setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ColumnFamily getColumnFamily() {
+            return columnFamily;
+        }
+
+        public HColumn setColumnFamily(ColumnFamily columnFamily) {
+            this.columnFamily = columnFamily;
+            return this;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public HColumn setValue(String value) {
+            this.value = value;
+            return this;
+        }
+
+        class ColumnFamily {
+            private String name;            //列族名
+            private String table;           //表名
+
+            public String getName() {
+                return name;
+            }
+
+            public ColumnFamily setName(String name) {
+                this.name = name;
+                return this;
+            }
+
+            public String getTable() {
+                return table;
+            }
+
+            public ColumnFamily setTable(String table) {
+                this.table = table;
+                return this;
+            }
+        }
+
+
+    }
+}

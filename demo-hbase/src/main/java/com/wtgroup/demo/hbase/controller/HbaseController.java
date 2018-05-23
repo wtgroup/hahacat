@@ -2,6 +2,7 @@ package com.wtgroup.demo.hbase.controller;
 
 import com.wtgroup.demo.hbase.utils.HBaseUtilSingleton;
 import com.wtgroup.demo.hbase.utils.MD5Utils;
+import org.apache.hadoop.hbase.client.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -49,9 +50,9 @@ public class HbaseController {
         log.debug("身份证号MD5后5位: {}", md5Prefix);
 
 
-        md5Prefix += "-" + certno + "-";
+        prefix = md5Prefix+"-" + certno + "-";
 
-        log.debug("row key前缀: {}", md5Prefix);
+        log.debug("row key前缀: {}", prefix);
 
         ArrayList<String> faColPairs = new ArrayList<>();
         faColPairs.add("cf,event");
@@ -59,12 +60,33 @@ public class HbaseController {
         faColPairs.add("cf,content");
         faColPairs.add("cf,create_time");
 
+        String stopRow = nextString(prefix);
+        log.debug("stop row: " + stopRow);
+        List<Result> res = HBaseUtilSingleton.getRowsByPrefix("lh_test2", prefix, faColPairs,prefix,stopRow);
 
-        List<String> res = HBaseUtilSingleton.getRowsByPrefix("lh_test2", md5Prefix, faColPairs);
-
-        log.debug("查询结果: " + res.toString());
+        //log.debug("查询结果: " + res.toString());
+        log.debug("查询结果: {}",res.size());
 
         return res.toString();
+    }
+
+
+    /**根据ASCII码获取下一个字符串
+     * @param current
+     * @return
+     */
+    public static String nextString(String current)
+    {
+        Integer ascii = 0;
+        StringBuffer sbu = new StringBuffer();
+        char[] chars = current.toCharArray();
+        char last = chars[chars.length - 1];
+        chars[chars.length-1] = (char) ((int)last+1);
+        for (char aChar : chars) {
+            sbu.append(aChar);
+        }
+
+        return sbu.toString();
     }
 
 
