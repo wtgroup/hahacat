@@ -1,6 +1,7 @@
 package com.wtgroup.ohm.annotation.support;
 
 import com.wtgroup.ohm.annotation.Column;
+import com.wtgroup.ohm.bean.Column;
 import com.wtgroup.ohm.annotation.HEntity;
 import com.wtgroup.ohm.annotation.RowKey;
 import net.sf.cglib.beans.BeanGenerator;
@@ -9,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.io.File;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -23,8 +23,8 @@ import java.util.Set;
  * @email liuhejun108@163.com
  * @date 2018-05-23-1:43
  */
-public class HEntityCreator<T> {
-    private final Logger log = LoggerFactory.getLogger(HEntityCreator.class);
+public class HEntityDescriptor<T> {
+    private final Logger log = LoggerFactory.getLogger(HEntityDescriptor.class);
     private T hEntityProxy;
     private String rowKey;
     private String table;
@@ -32,7 +32,7 @@ public class HEntityCreator<T> {
     private Set<com.wtgroup.ohm.bean.Column> columns = new LinkedHashSet<>();
 
 
-    public HEntityCreator(Class<T> hEntityClzz) {
+    public HEntityDescriptor(Class<T> hEntityClzz) {
         //判断是否还有 @HEntity注解
         if (!hasHEntityAnt(hEntityClzz)) {
             throw new RuntimeException(hEntityClzz.getName() + "缺少@HEntity类注解");
@@ -293,7 +293,7 @@ public class HEntityCreator<T> {
         return rowKey;
     }
 
-    public HEntityCreator setRowKey(String rowKey) {
+    public HEntityDescriptor setRowKey(String rowKey) {
         this.rowKey = rowKey;
         return this;
     }
@@ -302,7 +302,7 @@ public class HEntityCreator<T> {
         return table;
     }
 
-    public HEntityCreator setTable(String table) {
+    public HEntityDescriptor setTable(String table) {
         this.table = table;
         return this;
     }
@@ -311,7 +311,7 @@ public class HEntityCreator<T> {
         return defaultFamily;
     }
 
-    public HEntityCreator setDefaultFamily(String defaultFamily) {
+    public HEntityDescriptor setDefaultFamily(String defaultFamily) {
         this.defaultFamily = defaultFamily;
         return this;
     }
@@ -320,7 +320,7 @@ public class HEntityCreator<T> {
         return columns;
     }
 
-    public HEntityCreator setColumns(Set<com.wtgroup.ohm.bean.Column> columns) {
+    public HEntityDescriptor setColumns(Set<com.wtgroup.ohm.bean.Column> columns) {
         this.columns = columns;
         return this;
     }

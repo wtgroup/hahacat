@@ -1,14 +1,13 @@
 package com.wtgroup.ohm.utils;
 
-import com.wtgroup.ohm.annotation.support.HEntityCreator;
+import com.wtgroup.ohm.annotation.support.HEntityDescriptor;
 import com.wtgroup.ohm.annotation.support.ResultHandler;
+import com.wtgroup.ohm.annotation.support.SimpleResultHandler;
 import com.wtgroup.ohm.bean.Column;
-import net.sf.cglib.beans.BeanGenerator;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.mortbay.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +23,10 @@ import java.util.*;
  * @date 2018-05-23-1:29
  */
 public abstract class HBaseSupport<T> {
-    private final Logger LOG = LoggerFactory.getLogger(HBaseSupport.class);
+    private final Logger log = LoggerFactory.getLogger(HBaseSupport.class);
     private HBaseManager manager = new HBaseManager();
     private T hEntity;
-    private HEntityCreator<T> creator;
+    private HEntityDescriptor<T> hEntityDescriptor;
 
 
     public HBaseSupport() {
@@ -37,16 +36,24 @@ public abstract class HBaseSupport<T> {
             ParameterizedType prtype = (ParameterizedType) type;
             Type[] args = prtype.getActualTypeArguments();
             Class<T> hEntityClzz = (Class<T>) args[0];
-//            try {
-//                hEntity = hEntityClzz.newInstance();
-//            } catch (InstantiationException e) {
-//                e.printStackTrace();
-//            } catch (IllegalAccessException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                hEntity = hEntityClzz.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            //根据传入的实体类获取对应的描述信息
+            hEntityDescriptor = new HEntityDescriptor<T>(hEntityClzz);
+
+            //解析注解, 得到表名,row key,列族,列
+
+
+
+            //结果集封装利用反射
 
             //生成指定的实体类的代理对象, 包含更多的信息
-            creator = new HEntityCreator<T>(hEntityClzz);
 
 
             //.instance();
@@ -65,20 +72,19 @@ public abstract class HBaseSupport<T> {
         ResultScanner scanner = null;
         try {
             long start = System.currentTimeMillis();
-            table = conn.getTable(TableName.valueOf(creator.getTable()));
+            table = conn.getTable(TableName.valueOf(hEntityDescriptor.getTable()));
             PrefixFilter filter = new PrefixFilter(rowKeyPrefix.getBytes());
             Scan scan = new Scan();
             scan.setFilter(filter);
 
-            Set<Column> columns = creator.getColumns();
+            Set<Column> columns = hEntityDescriptor.getColumns();
             for (Column col : columns) {
-                LOG.debug("待查询列族: {}, 待查询列名: {}", col.getFamily(), col.getName());
+                log.debug("待查询列族: {}, 待查询列名: {}", col.getFamily(), col.getName());
                 scan.addColumn(Bytes.toBytes(col.getFamily()), Bytes.toBytes(col.getName()));       //family, column
-
             }
 
 
-            LOG.debug("即将开始scan查询");
+            log.debug("即将开始scan查询");
             scanner = table.getScanner(scan);
 //            for (Result result : scanner) {
 //                list.add(result);           //TODO 返回结果友好化
@@ -89,14 +95,35 @@ public abstract class HBaseSupport<T> {
             while (results.hasNext()) {
                 Result r = results.next();
 
-                //调用结果处理器
-                 new ResultHandler<T>(r,hEntity);
+                //调用结果处理器处理
+                ResultHandler<T> handler = new ResultHandler<>() {
+                    @Override
+                    public Object handle(Result result, Object hEntity,) {
+
+
+
+                        return null;
+                    }
+                };
+
+
+                ResultHandler resultHandler = new SimpleResultHandler();
+
+                String rowKey = Bytes.toString(r.getRow());
+
+                //
+                for (Column col : columns) {
+
+                }
 
 
 
 
+                SimpleResultMapper<T> mapper = new SimpleResultMapper<>();
 
-//                String rowId = Bytes.toString(r.getRow());
+                mapper.mapping()
+
+
 
 //                for (String fc : familyAndColumnPairs) {
 //                    String[] fcArr = fc.split(",");
@@ -112,7 +139,7 @@ public abstract class HBaseSupport<T> {
         }
         ;
             long end = System.currentTimeMillis();
-            LOG.info("前缀查询耗时 : {}ms", end - start);
+            log.info("前缀查询耗时 : {}ms", end - start);
 
 
         } catch (Exception e) {
