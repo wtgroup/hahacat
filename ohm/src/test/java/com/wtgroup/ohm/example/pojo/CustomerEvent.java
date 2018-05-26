@@ -1,4 +1,4 @@
-package com.wtgroup.ohm.pojo;
+package com.wtgroup.ohm.example.pojo;
 
 import com.wtgroup.ohm.annotation.Column;
 import com.wtgroup.ohm.annotation.HEntity;

@@ -31,14 +31,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @email liuhejun108@163.com
  * @date 2018/5/17 12:44
  */
-public class HBaseManager {
-    public static final String HBASE_ZOOKEEPER_QUORUM = "offlinenode3,offlinenode4,offlinenode5";
-    public static final int HBASE_TABLE_REGION_NUM = 10;
+public class HBaseUtilSingleton {
+//    public static final String HBASE_ZOOKEEPER_QUORUM = "offlinenode3,offlinenode4,offlinenode5";
+    public static final int HBASE_TABLE_REGION_NUM = ResourceUtil.getInteger("hbase.table.region.num")==null?10:ResourceUtil.getInteger("hbase.table.region.num");
     public static final String COMMA = ",";
     public static final String HIVE_SEP = "\\x01";
-    public static final String DEFAULT_COLUMNFAMILY = "defaultColumnFamily";
+    public static final String DEFAULT_COLUMNFAMILY = ResourceUtil.get("default_columnfamily")==null?"defaultColumnFamily":ResourceUtil.get("default_columnfamily");
 
-    private static Logger LOG = LoggerFactory.getLogger(HBaseManager.class);
+    private static Logger LOG = LoggerFactory.getLogger(HBaseUtilSingleton.class);
     private static Configuration conf = null;
     private static Connection conn = null;
     private static ReadWriteLock rwlock = new ReentrantReadWriteLock();
@@ -70,9 +70,8 @@ public class HBaseManager {
                 wlock.lock();
                 if (conf == null) {
                     conf = HBaseConfiguration.create();
-                    //conf.set("hbase.zookeeper.quorum", ResourceUtil.getString("hbase.zookeeper.quorum"));
-                    conf.set("hbase.zookeeper.quorum", HBASE_ZOOKEEPER_QUORUM);
-                    conf.set("hbase.client.keyvalue.maxsize", "0");
+                    conf.set("hbase.zookeeper.quorum", ResourceUtil.get("hbase.zookeeper.quorum"));
+                    conf.set("hbase.client.keyvalue.maxsize", ResourceUtil.get("hbase.client.keyvalue.maxsize"));
 
                 }
             } catch (Exception e) {
@@ -344,114 +343,5 @@ public class HBaseManager {
     }
 
 
-    /**
-     * 给定rowKey前缀, 模糊匹配.
-     * Note: 限定了family范围
-     *
-     * @param tableName
-     * @param rowKeyLike
-     * @param familyAndColumnPairs ["family01,column01","family02,column02",...]
-     * @return
-     */
-    public static List<String> getRowsByPrefix(String tableName,
-                                               String rowKeyLike, List<String> familyAndColumnPairs) {
-        Connection conn = getConnection();
-        Table table = null;
-        List<String> list = new ArrayList<String>();
-        ResultScanner scanner = null;
-        try {
-            long start = System.currentTimeMillis();
-            table = conn.getTable(TableName.valueOf(tableName));
-            PrefixFilter filter = new PrefixFilter(rowKeyLike.getBytes());
-            Scan scan = new Scan();
-            scan.setFilter(filter);
-            for (String v : familyAndColumnPairs) {
-                String[] s = v.split(",");
-                LOG.debug("待查询列族: {}, 待查询列名: {}",s[0],s[1]);
-                scan.addColumn(Bytes.toBytes(s[0]), Bytes.toBytes(s[1]));       //family, column
-            }
-
-            LOG.debug("即将开始scan查询");
-            scanner = table.getScanner(scan);
-//            for (Result result : scanner) {
-//                list.add(result);           //TODO 返回结果友好化
-//            }
-
-            //结果打印
-            Iterator<Result> results = scanner.iterator();
-            while (results.hasNext()) {
-                Result r = results.next();
-                String rowId = Bytes.toString(r.getRow());
-
-                for (String fc : familyAndColumnPairs) {
-                    String[] fcArr = fc.split(",");
-                    Cell cell = r.getColumnLatestCell(fcArr[0].getBytes(), fcArr[1].getBytes());
-                    String cellVal = new String(CellUtil.cloneValue(cell));
-                    String res = "行名: " + rowId + ", 列族名: " + fcArr[0] + ", 列名: " + fcArr[1] + ", 值: " + cellVal;
-                    LOG.debug(res);
-                    list.add(res);
-                }
-
-            };
-            long end = System.currentTimeMillis();
-            LOG.info("前缀查询耗时 : {}ms", end-start);
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                table.close();
-                scanner.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        return list;
-    }
-
-
-    /**
-     * 获取所有数据
-     * 指定表下多有family的所有字段, 所有行
-     *
-     * @param tableName
-     * @throws Exception
-     */
-    public static void getAllRows(String tableName) throws Exception {
-        Connection conn = getConnection();
-        ResultScanner results = null;
-        Table table = null;
-
-        try {
-            table = conn.getTable(TableName.valueOf(tableName));
-            Scan scan = new Scan();
-            results = table.getScanner(scan);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                table.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        // 输出结果 TODO
-        for (Result result : results) {
-            for (KeyValue rowKV : result.raw()) {
-                System.out.print("行名:" + new String(rowKV.getRow()) + " ");
-                System.out.print("时间戳:" + rowKV.getTimestamp() + " ");
-                System.out.print("列族名:" + new String(rowKV.getFamily()) + " ");
-                System.out
-                        .print("列名:" + new String(rowKV.getQualifier()) + " ");
-                System.out.println("值:" + new String(rowKV.getValue()));
-            }
-        }
-    }
 }
 

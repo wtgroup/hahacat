@@ -1,5 +1,7 @@
 package com.wtgroup.ohm.bean;
 
+import java.lang.reflect.Field;
+
 /**
  * @author Nisus Liu
  * @version 0.0.1
@@ -9,17 +11,19 @@ package com.wtgroup.ohm.bean;
 public class Column {
 
 
-    private String name;
+    private String name;        //对应hbase的列名
     private String family;
     private String table;
+    private Field field;        //对应javabean的字段名
 
     public Column() {
     }
 
-    public Column(String name, String family, String table) {
+    public Column(String name, String family, String table, Field field) {
         this.name = name;
         this.family = family;
         this.table = table;
+        this.field = field;
     }
 
     public String getName() {
@@ -64,5 +68,13 @@ public class Column {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
     }
 }

@@ -14,4 +14,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RowKey {
+    /**列名, 缺省为字段名.*/
+    String name() default "";
 }
