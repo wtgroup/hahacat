@@ -1,6 +1,8 @@
 package com.wtgroup.ohm;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.wtgroup.ohm.utils.ResourceUtil;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -12,7 +14,7 @@ import org.junit.Test;
 public class TestResourceUtil {
     @Test
     public void fun01(){
-        String name = ResourceUtil.get("name");
+        String name = ResourceUtil.get("hbase.zookeeper.quorum");
         System.out.println(name);
 
         System.out.println(ResourceUtil.getBoolean("sex"));
@@ -29,4 +31,11 @@ public class TestResourceUtil {
 //        ResourceUtil.on("xx.prop");
 //        System.out.println(ResourceUtil.get("name"));
 //    }
+
+    @Test
+    public void fun03(){
+        //Assert.assertNotNull("为null",null);
+//        String.valueOf(null);
+        System.out.println(Boolean.valueOf(null));
+    }
 }

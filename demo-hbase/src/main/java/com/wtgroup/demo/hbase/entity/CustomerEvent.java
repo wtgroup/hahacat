@@ -1,4 +1,4 @@
-package com.wtgroup.ohm.example.pojo;
+package com.wtgroup.demo.hbase.entity;
 
 import com.wtgroup.ohm.annotation.Column;
 import com.wtgroup.ohm.annotation.HEntity;
@@ -25,12 +25,14 @@ public class CustomerEvent {
     @Column(family = "cf")          //totest 不指定name, 预期: 默认用字段名
     private String event;
     @Column(name="event_type")      //数据库字段习惯是下划线风格, 所以需要制定. totest 默认采用类上的defaultFamily
-    private Integer eventType;      // 1: 注册  2: 登录  3: 绑卡  4: 交易
+    private String eventType;      // 1: 注册  2: 登录  3: 绑卡  4: 交易
     @Column     //totest 缺省字段名, 和defaultFamily
     private String content;
 
     //column family: action_stat(行为统计数据)
+//    @Column(name = "login_count",family="action_stat")
     private Long loginCount;        //登录次数统计
+//    @Column(name = "max_online",family = "action_stat")
     private Long maxOnline;         //最大在线时长
 
     @RowKey
@@ -58,12 +60,31 @@ public class CustomerEvent {
         this.event = event;
     }
 
-    public Integer getEventType() {
+    public String getEventType() {
         return eventType;
     }
 
-    public void setEventType(Integer eventType) {
+    public CustomerEvent setEventType(String eventType) {
         this.eventType = eventType;
+        return this;
+    }
+
+    public Long getLoginCount() {
+        return loginCount;
+    }
+
+    public CustomerEvent setLoginCount(Long loginCount) {
+        this.loginCount = loginCount;
+        return this;
+    }
+
+    public Long getMaxOnline() {
+        return maxOnline;
+    }
+
+    public CustomerEvent setMaxOnline(Long maxOnline) {
+        this.maxOnline = maxOnline;
+        return this;
     }
 
     public String getContent() {

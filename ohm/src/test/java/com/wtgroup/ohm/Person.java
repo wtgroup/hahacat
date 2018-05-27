@@ -1,5 +1,7 @@
 package com.wtgroup.ohm;
 
+import java.util.Date;
+
 /**
  * 测试用的pojo
  *
@@ -11,6 +13,10 @@ package com.wtgroup.ohm;
 public class Person {
     private String name;
     private int age;
+    private Integer height;
+    private Boolean sex;
+    private boolean sex2;
+    private Date birthday;
 
     public String getName() {
         return name;

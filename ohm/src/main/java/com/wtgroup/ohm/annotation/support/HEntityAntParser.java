@@ -109,13 +109,17 @@ public class HEntityAntParser<T> {
         Field[] declaredFields = hEntityClass.getDeclaredFields();
         for (Field f : declaredFields) {
             f.setAccessible(true);
-            //解析 row key
-            this.rowKey = parseRowKey(f);
+            if (f.isAnnotationPresent(RowKey.class)) {
+                //解析 row key
+                this.rowKey = parseRowKey(f);
+            }
 
-            //解析普通字段
-            com.wtgroup.ohm.bean.Column column = parseColumn(f);
-            if (column != null) {
-                this.columns.add(column);
+            if (f.isAnnotationPresent(com.wtgroup.ohm.annotation.Column.class)) {
+                //解析普通字段
+                com.wtgroup.ohm.bean.Column column = parseColumn(f);
+                if (column != null) {
+                    this.columns.add(column);
+                }
             }
 
         }
@@ -125,13 +129,17 @@ public class HEntityAntParser<T> {
         Method[] declaredMethods = hEntityClass.getDeclaredMethods();
         for (Method m : declaredMethods) {
             m.setAccessible(true);
+            if (m.isAnnotationPresent(RowKey.class)) {
             //解析 row key
             this.rowKey = parseRowKey(m);
+            }
 
-            //解析普通字段
-            com.wtgroup.ohm.bean.Column column = parseColumn(m);
-            if (column != null) {
-                columns.add(column);            //方法的优先级高于字段, 字段有重复的会被替换
+            if (m.isAnnotationPresent(com.wtgroup.ohm.annotation.Column.class)) {
+                //解析普通字段
+                Column column = parseColumn(m);
+                if (column != null) {
+                    columns.add(column);            //方法的优先级高于字段, 字段有重复的会被替换
+                }
             }
 
         }
@@ -140,6 +148,8 @@ public class HEntityAntParser<T> {
 
 
     private com.wtgroup.ohm.bean.Column parseColumn(AccessibleObject fieldOrMethod) {
+        fieldOrMethod.setAccessible(true);
+
         String fieldName = null;
         Field field = null;
         if (fieldOrMethod instanceof Field) {
@@ -183,6 +193,7 @@ public class HEntityAntParser<T> {
                 log.warn("无法建立列名{}和javabean字段间的映射关系: 获取Field失败", colName);
             } else {
                 //创建 Column
+                log.debug("解析出: column name: {}, column family: {}, Filed: {}",new Object[]{colName,family,field});
                 return new com.wtgroup.ohm.bean.Column(colName, family, table, field);
             }
 
@@ -193,12 +204,7 @@ public class HEntityAntParser<T> {
 
 
     private com.wtgroup.ohm.bean.RowKey parseRowKey(AccessibleObject fieldOrMethod) {
-
-        if (!fieldOrMethod.isAnnotationPresent(RowKey.class)) {
-            log.warn("未发现@RowKey注解");
-            return null;
-        }
-
+        fieldOrMethod.setAccessible(true);
         Field field = null;
 
         if (fieldOrMethod instanceof Field) {
@@ -239,12 +245,15 @@ public class HEntityAntParser<T> {
 
         if (field != null) {
             RowKey rowKeyAnt = fieldOrMethod.getAnnotation(RowKey.class);
+            if (rowKeyAnt == null) {
+                return null;
+            }
             String rowKeyName = rowKeyAnt.name();
             if ("".equals(rowKeyName)) {
                 //字段名作为RowKey名
                 rowKeyName = field.getName();
             }
-
+            log.debug("解析出: row key name: {}, Field: {}",rowKeyName,field);
             return new com.wtgroup.ohm.bean.RowKey(rowKeyName, table, field);
         }
 
@@ -261,8 +270,6 @@ public class HEntityAntParser<T> {
 
         return this;
     }
-
-
 
 
     public String getTable() {

@@ -1,6 +1,11 @@
 package com.wtgroup.ohm.utils;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -14,15 +19,27 @@ import java.util.ResourceBundle;
  * @date 2018-05-26-16:53
  */
 public class ResourceUtil {
-
+private static final Logger log = LoggerFactory.getLogger(ResourceUtil.class);
     private static Properties properties = new Properties();
 
     static {        //静态属性 -> 静态代码块 -> 代码块 -> 构造方法!
-        InputStream ohmConf;
-
+        //log.debug("ohm.properties的绝对路径: {}",ResourceUtil.class.getClassLoader().getResource("ohm.properties").getPath());
+        //InputStream ohmConf;
         //加载默认配置文件: ohm.properties
-        ohmConf = ResourceUtil.class.getClassLoader().getResourceAsStream("ohm.properties");
+        //ohmConf = ResourceUtil.class.getClassLoader().getResourceAsStream("ohm.properties");
 
+        Resource resource = new ClassPathResource("ohm.properties");
+        try {
+            log.debug("资源文件名: {}",resource.getFile());
+        } catch (IOException e) {
+            log.debug("当前环境不支持生成File实例, 资源文件可能在jar包中");
+        }
+        try {
+            properties.load(resource.getInputStream());
+            log.debug("加载资源文件后的properties键值对数目: {}",properties.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -33,7 +50,8 @@ public class ResourceUtil {
      * @return
      */
     public static String get(String key) {
-        return String.valueOf(properties.get(key));
+        Object val = properties.get(key);
+        return val==null?null:String.valueOf(val);
     }
 
     /**
@@ -43,23 +61,28 @@ public class ResourceUtil {
      * @return
      */
     public static Boolean getBoolean(String key) {
-        return Boolean.valueOf(get(key));
+        String val = get(key);
+        return val==null?null:Boolean.valueOf(val);
     }
 
     public static Integer getInteger(String key) {
-        return Integer.valueOf(get(key));
+        String val = get(key);
+        return val==null?null:Integer.valueOf(val);
     }
 
     public static Long getLong(String key) {
-        return Long.valueOf(get(key));
+        String val = get(key);
+        return val==null?null:Long.valueOf(val);
     }
 
     public static Float getFloat(String key) {
-        return Float.valueOf(get(key));
+        String val = get(key);
+        return val==null?null:Float.valueOf(val);
     }
 
     public static Double getDouble(String key) {
-        return Double.valueOf(get(key));
+        String val = get(key);
+        return val==null?null:Double.valueOf(val);
     }
 
 }

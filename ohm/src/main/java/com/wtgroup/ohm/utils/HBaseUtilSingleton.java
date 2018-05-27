@@ -321,7 +321,7 @@ public class HBaseUtilSingleton {
 
         } catch (TableNotFoundException | RetriesExhaustedWithDetailsException e) {
             // If table not exists, create it
-            LOG.warn("Table {} not found, it will be created soon.", tableName);
+            LOG.warn("Table {} not found, it will be created soon, with default column family name:{}", tableName,DEFAULT_COLUMNFAMILY);
             createTable(tableName, DEFAULT_COLUMNFAMILY);
             // run the method again
             deleteRowByRowkey(tableName, rowKey);
