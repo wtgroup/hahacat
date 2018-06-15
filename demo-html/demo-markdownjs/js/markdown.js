@@ -1812,7 +1812,7 @@
             var count = count_lines(codeContent);
 
             code_block[1] = {
-                type: m[1] === undefined ? "unknown" : m[1]
+                type: m[1] === undefined ? "unknown" : m[1]     //建议用class属性
             };
             code_block[2] = codeContent;
 
