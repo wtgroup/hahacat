@@ -7,18 +7,32 @@
     <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
 
 
-
-
 </head>
 <body>
 
 </body>
 <script>
-    var Const = function Const() {
-        this.name='haha';
-        this.age=80;
-    }
-    var inst = new Const();
-    console.log(typeof inst);
+    //    var re = /^(?:```) *(\w+)* *\n([^(```)]*)(?:```)(?:\n|$)/;
+    //    var re = /^(?:```)([^(```)]*)(?:```)(?:\n|$)/;
+    //    var re = /(\s|\S)*/;
+    var re = /(```[\s|\S]*```)/;
+    var txt = "```  \n java   \n " +
+        "ds\n" +
+        "\n" +
+        ".chinaz.com|888\n" +
+        "sfs\n" +
+        "gbbd\n" +
+        "\n" +
+        "```";
+    var m = re.exec(txt);
+    console.log(m);
+
+    var match = txt.match(re);
+    console.log(match);
+
+var re1 = /(\s*)/g;
+var exec = re1.exec("\n");
+console.log(exec);
+
 </script>
 </html>

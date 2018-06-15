@@ -1,3 +1,9 @@
+
+# .git
+.git/
+*/.git/
+
+
 #Built application files
 *.apk
 *.ap_

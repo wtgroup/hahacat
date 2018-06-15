@@ -11,12 +11,21 @@
 <body>
 <textarea id="text-input" oninput="this.editor.update()"
           rows="6" cols="60">Type **Markdown** here.
+    ```
+    func
+    code
+# baioti
+    ```
 </textarea>
 <div id="preview"></div>
 <script>
+
+    //只要input绑定oninput事件, 便可以实时预览input的内容
+
     function Editor(input, preview) {
         this.update = function () {
-            preview.innerHTML = markdown.toHTML(input.value);
+//            preview.innerHTML = markdown.toHTML(input.value);
+            preview.innerHTML = markdown.toHTML(input.value,"CustomDialect");
         };
         //!巧妙, 将Editor实例作为input的属性, 这样, input就可以很方便的调用Editor的update()方法了!
         input.editor = this;
