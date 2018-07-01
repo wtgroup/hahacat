@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+    <script type="text/javascript" src="js/markdown.js"></script>
+<style>
+    textarea{
+        margin: 0px;
+        width: 600px;
+        height: 400px;
+    }
+
+    div#preview {
+        width: 600px;
+        height: 400px;
+        float: right;
+        margin: 0px 500px 0px 0px;
+    }
+</style>
+
+</head>
+<body>
+<textarea id="text-input" oninput="this.editor.update()"
+          rows="600" cols="60">Type **Markdown** here.
+    ```
+    func
+    code
+# baioti
+    ```
+</textarea>
+<div id="preview"></div>
+<script>
+
+    //只要input绑定oninput事件, 便可以实时预览input的内容
+
+    function Editor(input, preview) {
+//        input instanceof HTMLElement
+
+        if (input instanceof jQuery) {
+            input = input[0];
+        }
+
+        if (preview instanceof jQuery) {
+            preview = preview[0];
+        }
+
+        this.update = function () {
+//            preview.innerHTML = markdown.toHTML(input.value);
+            preview.innerHTML = markdown.toHTML(input.value, "CustomDialect");
+        };
+        //!巧妙, 将Editor实例作为input的属性, 这样, input就可以很方便的调用Editor的update()方法了!
+        input.editor = this;
+        //创建编辑器后立马初始更新一次
+        this.update();
+    }
+
+//    var $ = function (id) {
+//        return document.getElementById(id);
+//    };
+    new Editor($('#text-input'), $("#preview"));
+
+
+    /*--tab--*/
+    //--test2--
+    var ta = $('#text-input');
+
+    ta[0].onkeydown = function (e) {
+        if(enableTabIndent(this, e)){
+            e.preventDefault();     //只有tab键相关的事件才会阻止默认行为
+        }
+        console.log("ta.val()>>",ta.val());
+    };
+
+
+    function enableTabIndent(t, e) {
+        if (e.keyCode === 9) {
+            var start = t.selectionStart;
+            var end = t.selectionEnd;
+
+
+            var that = jQuery(t);
+
+            var value = that.val();
+            var before = value.substring(0, start);
+            var after = value.substring(end);
+            var selArray = value.substring(start, end).split('\n');
+
+            console.log("selArray>>",selArray);
+            console.log("e.shiftKey:", e.shiftKey);
+            var isIndent = !e.shiftKey;
+
+            if (isIndent) {
+                if (start === end || selArray.length === 1) {        //没有选择 or 选择了<1行
+                    that.val(before + '\t' + after);
+                    t.selectionStart = t.selectionEnd = start + 1;
+                } else {        //选择了多行
+                    var sel = '\t' + selArray.join('\n\t');
+                    that.val(before + sel + after);
+                    t.selectionStart = start + 1;
+                    t.selectionEnd = end + selArray.length;
+                }
+            } else {        //减少缩进
+                var reduceEnd = 0;
+                var reduceStart = false;
+
+                if (selArray.length > 1) {
+                    selArray.forEach(function (x, i, a) {
+                        console.log("forEach::x", x);
+                        if (i > 0 && x.length > 0 && x[0] === '\t') {
+                            a[i] = x.substring(1);
+                            reduceEnd++;
+                        }
+                    });
+                    sel = selArray.join('\n');
+                } else {        //没有选择 or 选择不足一行
+                    console.log("selArray[0]>>",selArray[0]);
+                    sel = selArray[0];
+                }
+
+                var b1 = '', b2 = '';
+                if (before.length) {
+                    var npos = before.lastIndexOf('\n');
+                    if (npos !== -1) {
+                        b1 = before.substring(0, npos + 1);
+                        b2 = before.substring(npos + 1);
+                    } else {
+                        b1 = '';
+                        b2 = before;
+                    }
+
+                    sel = b2 + sel;
+                }
+
+                if (sel.length && sel[0] === '\t') {        //start == end时不应该这样
+                    sel = sel.substring(1);
+                    reduceStart = true;
+                }
+
+                that.val(b1 + sel + after);
+                t.selectionStart = start + (reduceStart ? -1 : 0);
+                t.selectionEnd = end - (reduceEnd + (reduceStart ? 1 : 0));
+            }
+            return true;
+        }
+        //不是tab键
+         return false;
+    }
+
+
+
+
+
+
+
+
+
+/*
+* 缩进:
+*  if行首有空格
+*    if %4 === 0
+*      增加4个空格
+*    if m=%4 > 0
+*      增加 4-m 个空格
+* 反缩进:
+*   if行首有空格
+*     if %4 === 0
+*       减少4个空格
+*     if m=%4 > 0
+*       减少m个空格
+*
+* 没有选中内容时, 只有缩进时, 在光标位置往后缩进4个.
+* */
+
+
+
+
+    //--test1--
+    /*var isShift = false;
+    var ta = $('text-input');
+
+    ta.onkeydown = function (e) {
+        console.log("键盘数字:", e.keyCode);
+        if (e.keyCode === 16) {
+            isShift = true;
+        }
+        if (e.keyCode === 9) {
+                e.preventDefault();
+                var indent = '    ';
+//                var indent = '  ';  //用tab只有两个空格
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+                var selected = window.getSelection().toString();
+                console.log("选择的内容:",selected);
+
+            if (!isShift) {
+                selected = indent + selected.replace(/\n/g, '\n' + indent);
+                this.value = this.value.substring(0, start) + selected
+                    + this.value.substring(end);
+                this.setSelectionRange(start + indent.length, start
+                    + selected.length);
+
+                isShift = false;
+            }else{
+                //被选中的每行的 行首去掉4个空格
+            }
+        }
+    }*/
+
+
+
+    //    function preventDefault(e) {
+    //        //阻止默认切换元素的行为
+    //        if (e && e.preventDefault) {
+    //            e.preventDefault();
+    //        } else {
+    //            window.event.returnValue = false;
+    //        }
+    //    }
+
+
+    //    ta.onkeydown = function (e) {
+    //        if (!this.value) this.value = '';
+    //        this.value += '\\t';
+    //        //阻止默认切换元素的行为
+    //        if (e && e.preventDefault) {
+    //            e.preventDefault();
+    //        } else {
+    //            window.event.returnValue = false;
+    //        }
+    //    }
+
+
+</script>
+</body>
+</html>

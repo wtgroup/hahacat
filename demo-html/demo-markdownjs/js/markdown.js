@@ -187,7 +187,7 @@
             }
             //下一个是代码块
             if(m[2].match(/\s*```/)) {
-                var re_code_quote = /(```[\s|\S]*```)?/g;     //```包裹的代码块匹配出来
+                var re_code_quote = /(```[\s|\S]*?```)/g;     //```包裹的代码块匹配出来
                 m[2] = "\n";        // ' \n ```','\n ```'统一换成\n
                 re.lastIndex -= 3;      //若匹配失败, 下次继续从re.lastIndex开始匹配
 
@@ -1809,6 +1809,12 @@
         if (m = re_back_quote.exec(block)) {        //```优先级更高
             //```代码块解析
             var codeContent = m[2];
+            //剔除尾部 \n ```之间的空格
+            if (!codeContent.match(/\n$/)) {
+                codeContent += '\n';
+            }
+
+
             var count = count_lines(codeContent);
 
             code_block[1] = {

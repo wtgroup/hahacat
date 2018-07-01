@@ -5,7 +5,55 @@
     <title>Title</title>
     <!--<script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>-->
     <script type="text/javascript" src="js/markdown.js"></script>
+    <style>
+        textarea {
+            margin: 0px;
+            width: 600px;
+            height: 400px;
+        }
 
+        div#preview {
+            width: 600px;
+            height: 400px;
+            float: right;
+            margin: 0px 500px 0px 0px;
+        }
+
+        pre{
+            position: relative;
+            overflow-y: hidden;
+            overflow-x: auto;
+            font-family: Consolas,Inconsolata,Courier,monospace;
+        }
+
+        pre code {
+            display: block;
+            font-size: 14px;
+            line-height: 22px;
+            overflow-x: auto;
+            padding: 0px 15px;
+            color: #000;
+            white-space: pre;
+            word-wrap: normal;
+            background-color: #f6f8fa;
+            border-radius: 4px;
+            font-family: Consolas,Inconsolata,Courier,monospace;
+            margin-left: 30px;
+        }
+
+        pre ul {
+            position: absolute;
+            width: 30px;
+            background-color: #eef0f4;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 8px 0;
+            list-style: none;
+            text-align: right;
+            font-family: Consolas,Inconsolata,Courier,monospace;
+        }
+    </style>
 
 </head>
 <body>
@@ -25,7 +73,7 @@
     function Editor(input, preview) {
         this.update = function () {
 //            preview.innerHTML = markdown.toHTML(input.value);
-            preview.innerHTML = markdown.toHTML(input.value,"CustomDialect");
+            preview.innerHTML = markdown.toHTML(input.value, "CustomDialect");
         };
         //!巧妙, 将Editor实例作为input的属性, 这样, input就可以很方便的调用Editor的update()方法了!
         input.editor = this;
@@ -37,6 +85,53 @@
         return document.getElementById(id);
     };
     new Editor($('text-input'), $("preview"));
+
+
+    /*--tab--*/
+    var isShift = false;
+    var ta = $('text-input');
+
+    ta.onkeydown = function (e) {
+        console.log("键盘数字:", e.keyCode);
+        if (e.keyCode === 16) {
+            isShift = true;
+        }
+        if (e.keyCode === 9) {
+            e.preventDefault();
+            var indent = '    ';
+//                var indent = '  ';  //用tab只有两个空格
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+            var selected = window.getSelection().toString();
+            console.log("选择的内容:", selected);
+
+            if (!isShift) {
+                selected = indent + selected.replace(/\n/g, '\n' + indent);
+                this.value = this.value.substring(0, start) + selected
+                    + this.value.substring(end);
+                this.setSelectionRange(start + indent.length, start
+                    + selected.length);
+
+                isShift = false;
+            } else {
+                //被选中的每行的 行首去掉4个空格
+            }
+        }
+    }
+
+
+    //    ta.onkeydown = function (e) {
+    //        if (!this.value) this.value = '';
+    //        this.value += '\\t';
+    //        //组织默认切换元素的行为
+    //        if (e && e.preventDefault) {
+    //            e.preventDefault();
+    //        } else {
+    //            window.event.returnValue = false;
+    //        }
+    //    }
+
+
 </script>
 </body>
 </html>

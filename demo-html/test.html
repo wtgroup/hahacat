@@ -5,6 +5,8 @@
     <title>Title</title>
     <script type="text/javascript" src="js/markdown.js"></script>
     <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+    <!--<script type="text/javascript" src="js/test.js"></script>-->
+    <script type="text/javascript" src="js/test.js?t=new Date()"></script>
 
 
 </head>
@@ -12,27 +14,6 @@
 
 </body>
 <script>
-    //    var re = /^(?:```) *(\w+)* *\n([^(```)]*)(?:```)(?:\n|$)/;
-    //    var re = /^(?:```)([^(```)]*)(?:```)(?:\n|$)/;
-    //    var re = /(\s|\S)*/;
-    var re = /(```[\s|\S]*```)/;
-    var txt = "```  \n java   \n " +
-        "ds\n" +
-        "\n" +
-        ".chinaz.com|888\n" +
-        "sfs\n" +
-        "gbbd\n" +
-        "\n" +
-        "```";
-    var m = re.exec(txt);
-    console.log(m);
-
-    var match = txt.match(re);
-    console.log(match);
-
-var re1 = /(\s*)/g;
-var exec = re1.exec("\n");
-console.log(exec);
-
+    foo();
 </script>
 </html>
