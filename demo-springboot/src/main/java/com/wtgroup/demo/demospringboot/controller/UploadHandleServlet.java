@@ -35,7 +35,7 @@ public class UploadHandleServlet extends HttpServlet {
         //String savePath = rootFile.getAbsolutePath() + "data/upload";       //不要直接拼接路径  避免 分隔符多或少
         File savePath = new File(getJarRootPath(), "data/upload");
         //判断上传文件的保存目录是否存在
-        if (!savePath.exists() && !savePath.isDirectory()) {
+        if (!savePath.exists() && savePath.isDirectory()) {
             log.info(savePath + "目录不存在，需要创建");
             //创建目录
             boolean created = savePath.mkdirs();

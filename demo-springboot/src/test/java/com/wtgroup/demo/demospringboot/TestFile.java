@@ -30,4 +30,10 @@ public class TestFile {
         System.out.println("jar包根目录:" + path.getAbsolutePath());
 
     }
+
+    @Test
+    public void fun3(){
+        String s = null;
+        System.out.println(s);
+    }
 }
