@@ -25,6 +25,8 @@
     }
 
     var $ = function (id) {
+        var ele = document.getElementById(id);
+        console.log(ele);
         return document.getElementById(id);
     };
     new Editor($('text-input'), $("preview"));

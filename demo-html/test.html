@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script type="text/javascript" src="js/markdown.js"></script>
     <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
-
-
 
 
 </head>
 <body>
-
+<div class="s" id="id">点击我</div>
 </body>
 <script>
-    var Const = function Const() {
-        this.name='haha';
-        this.age=80;
+    var scale = [2, 5];
+    if (scale instanceof Array) {
+        throw new  TypeError("type error");
     }
-    var inst = new Const();
-    console.log(typeof inst);
+
+
 </script>
 </html>

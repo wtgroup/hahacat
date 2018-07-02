@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue</title>
+    <script src="js/vue.js"></script>
+
+
+</head>
+<body>
+    <div id="vue_root">{{msg}}</div>
+    <!--挂载点内部都是模板-->
+    <hr/>
+    <div id="tpl1">
+        <h2>{{txt}}</h2>
+        <h2>{{txt2}}</h2>
+    </div>
+    <hr/>
+    <div id="tpl2"></div>
+<script>
+    //Vue实例
+    new Vue({
+        el: '#vue_root',     //挂载点
+        data: {
+            msg: 'Hello Vue.js'
+        }
+    });
+
+    //模板使用方式1
+    new Vue({
+        el:'#tpl1',
+        data:{
+            txt:'我是模板1',
+            txt2:'模板1:数据2'
+        }
+    });
+
+    //模板使用方式2
+    new Vue({
+        el:'#tpl2',
+        //Component template should contain exactly one root element. If you are using v-if on multiple elements,
+        // use v-else-if to chain them instead.
+        template:'<div><h2>{{txt}}</h2><h2>{{txt2}}</h2></div>',
+        data:{
+            txt:'我是模板2',
+            txt2:'模板2:数据2'
+        }
+    })
+</script>
+
+
+</body>
+</html>

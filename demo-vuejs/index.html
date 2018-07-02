@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue</title>
+    <script src="js/vue.js"></script>
+
+
+</head>
+<body>
+
+
+<hr/>
+
+<div id="root">
+    <input placeholder="请输入任务明细" v-model="newTask"/>
+    <input @click="handleClick" type="submit" value="提交任务"/>
+
+    <ul>
+        <!--<li v-for="(item, index) of tasks" :key="index">{{item}}</li>-->
+        <!--组件化-->
+        <todo-item v-for="(item,index) of tasks"
+                   :content="item" :index="index"
+                   @delete="handleDelete"></todo-item>       <!--<1> 向其他组件发送item变量
+                   / 订阅子组件的'delete'事件, 一旦子组件放射delete事件, 父组件就会调用handleDelete方法-->
+    </ul>
+
+</div>
+<script>
+    /*
+    * 父类向子类通信: 通过属性实现;
+    * 子类向父类通信: 发布订阅模式实现*/
+
+    //--全局组件--//
+//    Vue.component('todo-item',
+//        {
+//            props: ['content'],
+//            template: '<li>组件item</li>',
+//            methods: {
+//                handleClick: function () {
+//                    alert(this.content);
+//                }
+//
+//            }
+//        });
+
+    //--局部组件--//
+    var todoItem = {
+        props: ['content','index'],      //<2> 接收其他组件属性传入的变量
+        template: '<li @click="handleClick">{{content}}</li>',
+        methods: {
+            handleClick: function () {
+                //alert(this.content);
+                //子组件向外发布事件, 名称自定
+                this.$emit('delete', this.index);
+            }
+        }
+    };
+
+
+    new Vue({
+        el: '#root',
+        data: {
+            newTask: '',
+            tasks: []
+        },
+        methods: {
+            handleClick: function () {
+                this.tasks.push(this.newTask);
+            },
+            handleDelete:function (index) {
+                this.tasks.splice(index, 1);
+            }
+        },
+        components: {
+            'todo-item': todoItem
+        }
+    });
+
+
+</script>
+
+
+</body>
+</html>

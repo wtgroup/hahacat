@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="./css/datagrid.css">
+
+    <script type="text/javascript" src="js/lib/jquery-1.12.1.min.js"></script>
+    <script type="text/javascript" src="js/datagrid.js"></script>
+
+
+</head>
+<body>
+<div id="dg"></div>
+</body>
+<script>
+    //var datagrid = $('#dg').datagrid({totalPage:6}).paging();
+
+    var options = {
+        //定义列的顺序,格式,别名.....
+        columnAssigner: {
+            name: ['姓名'],
+            手机号: ['联系方式',  function (cell) {
+                    //将 +86 前缀剔除
+                    return cell.replace('+86 ', '');
+                }],
+            身份证号: ['证件号码', function (cell) {
+                    return 'CERT:' + cell;
+                }],
+            age: ['年龄',function (cell) {
+                    return cell * 2;
+                }]
+        }
+        //排除sex, address
+    };
+
+
+    var datagrid = $('#dg').datagrid(options);
+    datagrid.load("json/data.json",null,null,null, function (data) {
+        var page = {count: 0, data: data};
+        return page;
+
+    })
+
+
+</script>
+</html>

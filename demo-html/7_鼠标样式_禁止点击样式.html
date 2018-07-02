@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+
+
+
+
+</head>
+<body>
+<div class="s" id="id">点击我</div>
+<p class="s" id="id2">按钮2</p>
+<span class="s" id="id3"></span>
+</body>
+<script>
+    $('#id').css("cursor","not-allowed");
+    $('#id2').css("cursor","pointer");
+
+
+    $('#id2').click(function (event) {
+        alert("点击了");
+        $(this).css("cursor","not-allowed");
+    })
+
+
+
+</script>
+</html>

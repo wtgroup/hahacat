@@ -1,0 +1,55 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/task
+   		http://www.springframework.org/schema/task/spring-task-4.0.xsd
+   		http://www.springframework.org/schema/cache
+   		http://www.springframework.org/schema/cache/spring-cache.xsd">
+        <!--http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd-->
+
+    <!--
+    配置扫描包-->
+    <context:component-scan base-package="com.wtgroup.demo.springcache"/>
+
+    <!--
+    注意这个 spring 配置文件有一个关键的支持缓存的配置项：<cache:annotation-driven />，
+    这个配置项缺省使用了一个名字叫 cacheManager 的缓存管理器，这个缓存管理器有一个 spring 的缺省实现，
+    即 org.springframework.cache.support.SimpleCacheManager，
+    这个缓存管理器实现了我们刚刚自定义的缓存管理器的逻辑，它需要配置一个属性 caches，
+    即此缓存管理器管理的缓存集合，除了缺省的名字叫 default 的缓存，
+    我们还自定义了一个名字叫 accountCache 的缓存，
+    使用了缺省的内存存储方案 ConcurrentMapCacheFactoryBean，
+    它是基于 java.util.concurrent.ConcurrentHashMap 的一个内存缓存实现方案。-->
+
+    <cache:annotation-driven />
+
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <!--配置缓存名称集合, 即需要用的缓存需要在这里配置-->
+                <bean name="default" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/>
+                <bean name="accountCache" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/>
+                <bean name="otherCache" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/>
+            </set>
+        </property>
+    </bean>
+
+
+    <!--spring定时器-->
+    <task:annotation-driven/>
+
+</beans>

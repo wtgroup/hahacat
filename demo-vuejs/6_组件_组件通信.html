@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue</title>
+    <script src="js/vue.js"></script>
+
+
+</head>
+<body>
+
+
+<hr/>
+
+<div id="root">
+    <input placeholder="请输入任务明细" v-model="newTask"/>
+    <input @click="handleClick" type="submit" value="提交任务"/>
+
+    <ul>
+        <!--<li v-for="(item, index) of tasks" :key="index">{{item}}</li>-->
+        <!--组件化-->
+        <todo-item v-for="(item,index) of tasks"
+                   :content="item"></todo-item>       <!--<1>向其他组件发送item变量-->
+    </ul>
+
+</div>
+<script>
+    //--全局组件--//
+//    Vue.component('todo-item',{
+    //        template:'<li>组件item</li>'
+    //    });
+
+    //--局部组件--//
+    var todoItem = {
+        props:['content'],      //<2>接收其他组件属性传入的变量
+        template: '<li>{{content}}</li>'};
+
+    new Vue({
+        el: '#root',
+        data: {
+            newTask: '',
+            tasks:[]
+        },
+        methods: {
+            handleClick: function () {
+                this.tasks.push(this.newTask);
+            }
+        },
+        components:{
+            'todo-item':todoItem
+        }
+    });
+
+
+</script>
+
+
+</body>
+</html>

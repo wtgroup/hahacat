@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+
+
+
+
+</head>
+<body>
+<div class="s"></div>
+<p class="s"></p>
+<span class="s"></span>
+</body>
+<script>
+
+    var $s = $('.s');
+    console.log($s);
+    for(var i=0;i<$s.length;i++) {      //不支持forEach()遍历
+        console.log($s[i]);
+        console.log($($s[i]).hasClass('s'));        //直接取出来的是原生html字符串, 需要包装成jq对象
+    }
+
+
+</script>
+</html>

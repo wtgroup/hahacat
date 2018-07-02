@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue</title>
+    <script src="js/vue.js"></script>
+
+
+</head>
+<body>
+
+
+<hr/>
+
+<div id="root">
+    <input placeholder="请输入任务明细" v-model="newTask"/>
+    <input @click="handleClick" type="submit" value="提交任务"/>
+
+    <ul>
+        <li v-for="(item, index) of tasks" :key="index">{{item}}</li>
+    </ul>
+
+</div>
+<script>
+
+    new Vue({
+        el: '#root',
+        data: {
+            newTask: '',
+            tasks:[]
+        },
+        methods: {
+            handleClick: function () {
+                this.tasks.push(this.newTask);
+            }
+        }
+    });
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue</title>
+    <script src="js/vue.js"></script>
+
+
+</head>
+<body>
+<div id="vue_root">
+    <button @click="handleClick">切换显示</button><br/>
+    删除
+    <div v-if="show">这是内容区域<br>{{content}}</div>
+    隐藏 <!--display: none;-->
+    <div v-show="show">这是内容区域<br>{{content}}</div>
+
+    <hr>
+    v-for
+    <ul>
+        <!--注意: 这里补上key, 可以提高渲染效率(?)-->
+        <li v-for="(li,index) of tasks" :key="index"><span>{{index}}</span>{{li}}</li>
+    </ul>
+</div>
+
+<script>
+
+    new Vue({
+        el: '#vue_root',
+        data: {
+            content: 'hello everybody~~',
+            show: true,    //默认显示
+            tasks:['刷牙','洗脸','穿衣','收拾东西','出发']
+        },
+        methods: {
+            handleClick: function () {
+                this.show = !this.show;
+            }
+        }
+    });
+
+
+</script>
+
+
+</body>
+</html>

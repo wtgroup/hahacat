@@ -1,0 +1,53 @@
+/*分页样式*/
+.page_div {
+    width:100%;
+    text-align: right;
+    margin: 20px auto;
+    padding-right:30px;
+    font-size: 15px;
+    font-family: "microsoft yahei";
+    color: #666;
+    box-sizing: border-box;
+}
+.page_div a {
+    min-width: 30px;
+    height: 28px;
+    border: 1px solid #dce0e0;
+    text-align: center;
+    margin: 0 3px;
+    cursor: pointer;
+    line-height: 28px;
+    color: #666666;
+    font-size: 13px;
+    display: inline-block;
+}
+.firstPage,
+.lastPage {
+    width: 50px;
+    color: #f05f5f;
+    border: 1px solid #f05f5f;
+}
+
+.prePage,
+.nextPage {
+    width: 50px;
+    color: #f05f5f;
+    border: 1px solid #f05f5f;
+}
+
+.page_div .current {
+    background-color: #f05f5f;
+    border-color: #f05f5f;
+    color: #FFFFFF;
+    cursor:not-allowed;
+}
+
+.totalPages {
+    margin: 0 5px;
+}
+
+.totalPages span,
+.count span {
+    color: #f05f5f;
+    margin: 0 5px;
+}
