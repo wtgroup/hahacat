@@ -52,3 +52,9 @@ after returning
 
 为了逼真, 外层定义的公共方法, 什么都不做, 仅抛出 `java.lang.AbstractMethodError`.
 当然, 也可以定义公有的方法体.
+
+
+
+## `@RequestParam` and `@RequestBody`
+
+前者适用于获取get url请求参数; 后者适用于请求体参数

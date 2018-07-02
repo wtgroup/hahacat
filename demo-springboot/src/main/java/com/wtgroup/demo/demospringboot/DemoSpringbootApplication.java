@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
-@ServletComponentScan
+@ServletComponentScan		//扫描原生的servlet
 public class DemoSpringbootApplication {
 
 	public static void main(String[] args) {

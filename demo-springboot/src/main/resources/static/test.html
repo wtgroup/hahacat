@@ -9,12 +9,14 @@
 <h1>test</h1>
 <script>
     $.ajax({
-        url: "http://localhost:8080/postman",
+        url: "http://localhost:8080/aop",
+        type:"POST",
         data: {name: "libai"},
-        type: 'json',
         success: function (data) {
             console.log(data);
-        }
+        },
+        dataType: 'json',
+        contentType:'application/json'
     });
 </script>
 

@@ -28,12 +28,12 @@ public class ExceptionHandle {
 
         if (e instanceof CustomException) {
             //独创秘籍, 异常里就含有已经定义好的vo / 这样方便vo在整个流程中传递
-            log.error("[定制异常] {}", e);
+            log.error("[定制异常]", e);
 
             return ((CustomException) e).getResponseVo();
         }
 
-        log.error("[系统异常] {}", e);
+        log.error("[系统异常]", e);
         return ResponseVo.error(-1, e.getMessage());
     }
 }

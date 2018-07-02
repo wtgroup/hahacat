@@ -30,7 +30,7 @@ public class HttpAspect {
 
     @Before("log()")
     public void doBefore(JoinPoint joinPoint) {
-        System.out.println("before controller");
+        System.out.println("## before controller");
         Signature signature = joinPoint.getSignature();
         log.info("切点方法签名:{}",signature);
         String name = signature.getName();
@@ -44,8 +44,8 @@ public class HttpAspect {
 
     @AfterReturning(pointcut = "log()",returning = "responseVo")
     public void doAfterReturning(Object responseVo) {
-        System.out.println("after returning");
-        System.out.println(responseVo);
+        System.out.println("## after returning");
+        System.out.println("controller 返回的 responseVo: "+responseVo);
     }
 
 }

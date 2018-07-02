@@ -1,7 +1,10 @@
 package com.wtgroup.demo.demospringboot.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.wtgroup.demo.demospringboot.bean.Girl;
+import com.wtgroup.demo.demospringboot.bean.vo.ResponseVo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 测试aop
@@ -14,9 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AopController {
 
-    @RequestMapping(value = {"/aop"})
-    public String aop(){
-        System.out.println("进入controller中aop()");
-        return "aop returning";
+    @PostMapping(value = {"/aop"})
+    public ResponseVo aop(@RequestParam Map<String,Object> param,ResponseVo responseVo){
+        System.out.println("## 进入controller中aop()");
+
+        System.out.println("注入的ResponseVo.getMsg()==: "+responseVo.getMsg());
+
+        System.out.println(param);
+        responseVo.setData(param);
+
+        return responseVo.addMsg("aop returning");
+    }
+
+
+    @RequestMapping(value = {"/aop2"})
+    public ResponseVo aop2(Girl girl, ResponseVo responseVo){
+        System.out.println("## 进入controller中aop2()");
+        responseVo.setData(girl);
+
+        return responseVo.addMsg("aop returning");
     }
 }
