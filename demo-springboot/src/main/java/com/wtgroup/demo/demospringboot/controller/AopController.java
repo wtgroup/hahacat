@@ -20,7 +20,7 @@ public class AopController {
     @PostMapping(value = {"/aop"})
     public ResponseVo aop(@RequestParam Map<String,Object> param,ResponseVo responseVo){
         System.out.println("## 进入controller中aop()");
-
+        //System.out.println("制造了异常"+(1/0));
         System.out.println("注入的ResponseVo.getMsg()==: "+responseVo.getMsg());
 
         System.out.println(param);

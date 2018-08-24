@@ -39,7 +39,10 @@ public class RequestArgsAspect {
         responseVo.addMsg("我是aop生成的");
 
         //执行目标controller方法
-        return (ResponseVo) joinPoint.proceed(joinPoint.getArgs());
+        responseVo= (ResponseVo) joinPoint.proceed(joinPoint.getArgs());
+
+        System.out.println("## aroundController结束");
+        return responseVo;
     }
 
 }
