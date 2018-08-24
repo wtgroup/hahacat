@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="js/jquery-1.12.1.min.js"></script>
+
+</head>
+<body>
+
+<script>
+    let belongs = [{shouji:"119",province:"安徽"},{shouji:"222",province:"北京"}];
+//    let belongs = [1, 2, 3, 4];
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8089/mall/belong.do",
+        //data: {belongs: belongs},
+        data: JSON.stringify(belongs),
+        dataType: "json",
+        contentType : 'application/json;charset=utf-8', //设置请求头信息
+        success: function (data) {
+            console.log("post belongs success");
+        }
+    })
+
+</script>
+</html>

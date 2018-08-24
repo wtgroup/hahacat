@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="js/jquery-1.12.1.min.js"></script>
+
+</head>
+<body>
+<!--<a href="http://jshmgsdmfb.market.alicloudapi.com/shouji/query?shouji=18010708373">点击</a>-->
+<!--<a href="http://www.ip138.com:8080/search.asp?action=mobile&mobile=18010708373">点击</a>-->
+<h2>主页面</h2>
+<img src="./image/3793633099_3e1e53e4ac_o.jpg" alt="">
+</body>
+<script>
+    $.ajax({
+        type: 'GET',
+        data:{shouji:"18010708373,,15600117862,13023060189"},
+        headers: {
+            "Authorization": "APPCODE e030d00e287a442c9b1a8818b218620b"
+        },
+        url: 'http://jshmgsdmfb.market.alicloudapi.com/shouji/query',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+        },
+        error:function () {
+            //TODO 没有数据或失败了, 应该邮件通知开发者
+        }
+    });
+</script>
+</html>

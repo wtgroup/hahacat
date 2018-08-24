@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+    <!--<script type="text/javascript" src="js/test.js"></script>-->
+    <script type="text/javascript" src="js/test.js?t=new Date()"></script>
+
+
+</head>
+<body>
+<div id="id" style="width: 600px;height: 400px;"></div>
+</body>
+<script type="application/x-javascript">
+
+
+    /**
+     * 未指定的数组逐个映射一个随机的颜色, 颜色根据数组大小在颜色值上等分.
+     * @param {Array}arr 数组
+     * @return {Object}colorMap 入参数组元素->随机颜色
+     */
+    let buildColorMap = function (arr) {
+        let n = arr.length;
+        let colorMap = {};
+        let offset = Math.random();
+        for (let i = 0; i < arr.length; i++) {
+            let a = arr[i];
+            let fct = i / n + offset;
+            if (fct > 1) {
+                fct -= 1;
+            }
+
+            colorMap[a] = '#' + ('00000' + (fct * 0x1000000 << 0).toString(16)).slice(-6);
+        }
+
+        return colorMap;
+    };
+
+
+    //Test
+    let arr = ['李白', '王昭君', '张飞', '妲己','李白'];
+    let map = buildColorMap(arr);
+    console.log(map);
+
+    console.log(map['李白']);
+    $('#id').css('background', map['李白']);
+
+
+    //    var getRandomColor = function(){
+    //        return "hsb(" + Math.random()  + ", 1, 1)";
+    //    |}
+    var getRandomColor = function () {
+        return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+    }
+
+    var rd = Math.random();
+    console.log(rd);
+    console.log(rd * 0x1000000);
+    console.log((rd * 0x1000000 << 0));     // 取整
+
+    console.log(getRandomColor());
+
+    $('#id').css('background', getRandomColor());
+
+</script>
+</html>

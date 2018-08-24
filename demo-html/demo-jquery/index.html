@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-2.1.0.js"></script>
+    <script>
+        console.log('begin...');
+        $('body').append('<div>ooo ~~</div>')
+        $(function () {
+            $('body').append('<div>页面加载好了</div>')
+
+            $('body').bind('click',function () {
+                console.log('click body');
+            })
+        })
+
+
+    </script>
+</head>
+<body>
+
+
+</body>
+</html>

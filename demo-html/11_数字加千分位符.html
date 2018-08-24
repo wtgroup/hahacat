@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+    <!--<script type="text/javascript" src="js/test.js"></script>-->
+    <script type="text/javascript" src="js/test.js?t=new Date()"></script>
+
+
+</head>
+<body>
+<div class="s" id="id">点击我</div>
+</body>
+<script>
+    var num = 65689695970997756789.6796;
+
+    function parseThousandSep(num) {
+        var numStr = num + '';
+        //var intPart = Math.floor(num);
+        var pointPos = numStr.lastIndexOf('.');
+        var fracPartStr = '';
+        if (pointPos === -1) {
+            pointPos = numStr.length;
+        } else {
+            fracPartStr = numStr.substring(pointPos + 1);
+        }
+
+        var intPartStr = numStr.substring(0, pointPos);
+
+        var intPartSep = '';
+        for (var i = intPartStr.length - 1, j = 1; i > 0; i--, j++) {
+
+            intPartSep = intPartStr[i] + intPartSep;
+            if (j % 3 === 0) {
+                intPartSep = "," + intPartSep;
+            }
+        }
+        intPartSep = intPartStr[0] + intPartSep;
+
+        return intPartSep + '.'+fracPartStr;
+    }
+
+    console.log(num);
+    console.log(parseThousandSep(num));
+
+
+</script>
+</html>

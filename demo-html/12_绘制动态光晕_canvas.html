@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+    <!--<script type="text/javascript" src="js/test.js"></script>-->
+    <script type="text/javascript" src="js/test.js?t=new Date()"></script>
+
+
+</head>
+<body>
+<p>准备绘制的动态图片:</p>
+<img id="img1" src="image/20140501142243_QNC53.thumb.700_0.gif" alt="你的浏览器不支持img标签"></img>
+<p>canvas画布上绘制的动态图片:</p>
+<canvas id="canvas" width="800px" height="600px" style="background-color: #CCCCCC">你的浏览器不支持canvas标签</canvas>
+<p>圆环,动画</p>
+<canvas id="can2" width="800px" height="600px" style="background-color: #CCCCCC">你的浏览器不支持canvas标签</canvas>
+</body>
+<script type="application/x-javascript">
+    //    function draw() {
+    //        var ctx = document.getElementById('canvas').getContext('2d');
+    //        var img = new Image();
+    //        img.src = 'image/20140501142243_QNC53.thumb.700_0.gif';
+    //        img.onload = function () {
+    ////            ctx.drawImage(img,0,0);
+    //            setInterval(
+    //                ctx.drawImage(img, 0, 0)
+    //                , 500);
+    //            ctx.beginPath();
+    //        }
+    //    }
+    //
+    //    //    draw();
+    //
+    //    var ctx = document.getElementById('canvas').getContext('2d');
+    ////    var img = new Image();
+    ////    img.src = 'image/20140501142243_QNC53.thumb.700_0.gif';
+    //    var img = document.getElementById('img1');
+    //
+    //    setInterval(function () {
+    //        ctx.drawImage(img, 0, 0);
+    //    }, 20)
+
+    //
+    //    var ctx = document.getElementById('canvas').getContext('2d');
+    //
+
+
+    /**光晕动画效果
+     * @param radius 中心光源体的半径
+     * @param alpha 光源体的透明度
+     * @param maxRadius 光晕最大辐射范围
+     * @param {Function}drawLamp 绘制中心的光源的回调函数. */
+    var Aureole = function (context, x, y, radius, alpha, drawLamp) {
+        var drawAnnulus = function (ctx, x, y, radius, lineWidth, alpha) {
+//        ctx.save();
+
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = "rgba(167,87,168," + alpha + ")";
+//            ctx.strokeStyle = "rgba(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + alpha + ")";
+            ctx.beginPath();
+            // ctx.arc(s.x , s.y , 60, 0, Math.PI * 2, true);
+            ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+            // ctx.fillStyle = 'rgba(0,255,0,0.25)';
+            //ctx.fillStyle = 'rgba(104, 189, 246,0.2)';  //圆圈填充颜色  rgba(0,255,0,0.25)
+            //不关闭路径路径会一直保留下去，当然也可以利用这个特点做出意想不到的效果
+            //ctx.closePath();
+            //ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
+//        ctx.restore();
+        };
+
+//        var ctx = canvas.getContext('2d');
+        var maxRadius = radius * 1.3;     //radius,lineWidth,maxRadius三者之间的关系不好把握, 配置的不好, 会导致违反预期的结果
+        var _lineWidth = radius / 5;
+
+        var _radius = radius;
+        var _alpha = alpha;
+        //var count = 0;
+        var interval;
+        var boxpadding = maxRadius*1.05;     //外围最大圆圈和box的边距, 避免清除局部区域, 外围残留像素
+        var boxWidth = maxRadius * 2 + boxpadding;
+        var boxHeight = boxWidth;
+
+        //绘制中心圆 - 发光体
+        drawLamp(context, x, y, radius, alpha);
+
+        //end
+
+
+        function animate() {
+            //达到重绘制阈值后, 参数重置
+            if (_radius >= maxRadius) {
+                clearInterval(interval);
+                setTimeout(function () {
+                    context.clearRect(x - boxWidth / 2, y - boxHeight / 2, boxWidth, boxHeight);
+                    Aureole(context, x, y, radius, alpha, drawLamp);
+                }, 500);
+                return;
+            }
+            drawAnnulus(context, x, y, _radius+_lineWidth/2, _lineWidth, _alpha);
+
+            var oldLw = _lineWidth;
+            _lineWidth *= 0.6;
+            _alpha *= 0.6;
+            _radius += oldLw / 2 + _lineWidth / 2;
+        }
+
+        interval = setInterval(animate, 200);
+    };
+
+    var drawLamp = function (ctx, x, y, radius, alpha) {
+        ctx.fillStyle = "black";
+        ctx.radius = radius;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+    };
+
+    var r = 80;
+    var context = canvas.getContext('2d');
+
+    Aureole(context, 400, 300, r, 1, drawLamp);
+
+
+    //--------------
+
+    window.onload = function () {
+        var canvas = document.getElementById('can2'),  //获取canvas元素
+            context = canvas.getContext('2d'),  //获取画图环境，指明为2d
+
+            centerX = canvas.width / 2,   //Canvas中心点x轴坐标
+            centerY = canvas.height / 2,  //Canvas中心点y轴坐标
+            rad = Math.PI * 2 / 100, //将360度分成100份，那么每一份就是rad度
+            speed = 10; //加载的快慢就靠它了
+
+        canvas.onclick = function () {
+            window.open('flightHour.html');
+        }
+
+
+        //绘制外圈
+        function blueCircle(n) {
+            context.save();
+            context.strokeStyle = "#A757A8"; //设置描边样式
+            context.lineCap = "round";
+            context.radius = 30;
+            context.lineWidth = 30; //设置线宽
+            context.beginPath(); //路径开始
+            context.arc(centerX, centerY, 200, -Math.PI / 2, -Math.PI / 2 + n * rad, false); //用于绘制圆弧context.arc(x坐标，y坐标，半径，起始角度，终止角度，顺时针/逆时针)
+            context.stroke(); //绘制
+            context.closePath(); //路径结束
+            context.restore();
+        }
+
+        //绘制内圈
+        function whiteCircle() {
+            context.save();
+            context.beginPath();
+            context.radius = 20;
+            context.lineWidth = 20;
+            context.strokeStyle = "gray";
+            context.arc(centerX, centerY, 200, 0, Math.PI * 2, false);
+            context.stroke();
+            context.closePath();
+            context.restore();
+        }
+
+        //文字绘制
+        function text(n) {
+            context.save(); //save和restore可以保证样式属性只运用于该段canvas元素
+            context.strokeStyle = "#808080"; //设置描边样式
+            context.fillStyle = "#808080";
+
+            context.font = "60px sans-serif"; //设置字体大小和字体
+
+            //绘制字体，并且指定位置
+            context.fillText("966", centerX - 45, centerY - 20);
+            context.font = "40px sans-serif";
+            context.fillText("总数", centerX - 45, centerY + 40);
+            context.stroke(); //执行绘制
+            context.restore();
+        }
+
+        //动画循环
+        (function drawFrame() {
+            window.requestAnimationFrame(drawFrame, canvas);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            whiteCircle();
+            text(speed);
+
+            blueCircle(speed);
+            if (speed > 0 && speed < 88) {
+                speed += 1;
+            } else {
+                speed = 88;
+            }
+
+        }());
+    }
+
+
+</script>
+</html>

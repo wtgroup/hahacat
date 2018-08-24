@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script>
+        var libURL =/**/"src/app/lib.js";//*/'';
+        var supportURL =/**/"src/app/support.js";//*/'';
+        const a=1;
+        const b=a+2;
+        console.log(b);
+
+        function timeout(ms) {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, ms, 'done');        //成功后会将'done'传出去
+                //param1, param2, ...	可选。 传给执行函数的其他参数（IE9 及其更早版本不支持该参数）
+            });
+        }
+
+        timeout(100).then((value) => {
+            console.log(value);
+        });
+
+
+    </script>
+</head>
+<body>
+
+
+
+<script>
+    let obj = {};
+    let null2Blank = function (nullObj) {
+        return nullObj == null ? "" : nullObj;
+    };
+
+    let ss = `<td>手机号</td><td>${null2Blank(obj.a)}</td>`;
+
+    console.log(ss);
+
+</script>
+
+
+</body>
+</html>

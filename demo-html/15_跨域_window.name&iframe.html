@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--需要后台配合: window.name的设置-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <script>
+
+
+
+//        $.ajax({
+//            type: 'GET',
+//            headers: {
+//                "Host": "jshmgsdmfb.market.alicloudapi.com",
+//                "Origin":"http://www.ip138.com:8080",
+//                "X-Ca-Timestamp": "1531820313822",
+//                //"gateway_channel": "http",
+//                "X-Ca-Request-Mode": "debug",
+//                "X-Ca-Stage": "RELEASE",
+//                "Content-Type": "application/json; charset=utf-8",
+//                "Authorization": "APPCODE e030d00e287a442c9b1a8818b218620b"
+//            },
+//            url: 'http://jshmgsdmfb.market.alicloudapi.com/shouji/query?shouji=18010708373',
+//            url: 'http://www.ip138.com:8080/search.asp?action=mobile&mobile=18010708373',
+//            success: function (data) {
+//                console.log(data);
+//            },
+//            dataType: 'json'
+//        });
+
+
+    </script>
+</head>
+<body>
+<!--<a href="http://jshmgsdmfb.market.alicloudapi.com/shouji/query?shouji=18010708373">点击</a>-->
+<!--<a href="http://www.ip138.com:8080/search.asp?action=mobile&mobile=18010708373">点击</a>-->
+<h2>主页面</h2>
+
+</body>
+<script>
+
+
+    var iframe = document.createElement('iframe');
+    //iframe.style.display = 'none'; // 隐藏
+
+    var state = 0; // 防止页面无限刷新
+    iframe.onload = function() {
+        if(state === 1) {
+            /*此时, 虽然同源了, 但是iframe的内容已经变了*/
+            console.log(iframe.contentWindow.name)
+            console.log($('iframe').html());
+//            console.log(JSON.parse(iframe.contentWindow.name));
+            // 清除创建的iframe
+            //iframe.contentWindow.document.write('');
+            //iframe.contentWindow.close();
+            //document.body.removeChild(iframe);
+        } else if(state === 0) {
+            /*这里暂时获取不到iframe的内容, 主页面和iframe的src不同, 跨域限制*/
+            console.log(iframe);
+            state = 1;
+            // 加载完成，指向当前域，防止错误(proxy.html为空白页面)
+            // Blocked a frame with origin "http://localhost:10000" from accessing a cross-origin frame.
+            iframe.contentWindow.location = 'http://127.0.0.1:60952/proxy.html';
+            //console.log(iframe.contentWindow.name);
+            console.log(iframe.contentWindow.document);
+        }
+    };
+
+    iframe.src = 'http://www.ip138.com:8080/search.asp?action=mobile&mobile=18010708373';
+    document.body.appendChild(iframe);
+</script>
+</html>
