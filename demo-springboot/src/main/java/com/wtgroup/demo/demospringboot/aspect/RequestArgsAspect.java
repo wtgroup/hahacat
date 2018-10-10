@@ -2,6 +2,8 @@ package com.wtgroup.demo.demospringboot.aspect;
 
 import com.wtgroup.demo.demospringboot.bean.vo.ResponseVo;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,8 +22,8 @@ import java.util.Map;
  */
 @Aspect
 @Component
-@Log4j2
 public class RequestArgsAspect {
+    private static final Logger log = LogManager.getLogger(RequestArgsAspect.class);
 
     @Pointcut("execution(* com.wtgroup.demo.demospringboot.controller.*.*(java.util.Map,com.wtgroup.demo.demospringboot.bean.vo.ResponseVo)) " +
             "&& args(params,responseVo)")       //!类型完全一致才行, 父子类都不行!

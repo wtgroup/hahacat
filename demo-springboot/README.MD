@@ -1,4 +1,19 @@
 
+## spring boot 静态页面配置
+```
+spring.resources.static-locations=classpath:static/,file:static/,classpath:public/,file:public/
+```
+将会自动从配置的所有路径下找. *默认是static/*
+
+
+## Log
+
+```
+#Slf4j
+private static final Logger log = LoggerFactory.getLogger(TestController.class);
+#Log4j2
+private static final Logger log = LogManager.getLogger(RequestArgsAspect.class);
+```
 
 
 
@@ -21,7 +36,7 @@
 3.1 注意类上注解:
 `@Aspect`和`@Component`
 3.2 设置切点
-```java
+```
 @Pointcut("execution(public * com.wtgroup.demo.demospringboot.controller.AopController.*(..))")
 ```
 

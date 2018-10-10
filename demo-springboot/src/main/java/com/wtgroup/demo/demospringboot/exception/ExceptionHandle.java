@@ -2,6 +2,8 @@ package com.wtgroup.demo.demospringboot.exception;
 
 import com.wtgroup.demo.demospringboot.bean.vo.ResponseVo;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +20,8 @@ import javax.servlet.annotation.HandlesTypes;
  * @date 2018-07-01-0:38
  */
 @ControllerAdvice
-@Log4j2
 public class ExceptionHandle {
+    private static final Logger log = LogManager.getLogger(ExceptionHandle.class);
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
