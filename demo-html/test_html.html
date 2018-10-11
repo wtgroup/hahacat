@@ -6,22 +6,51 @@
     <script src="js/jquery-1.12.1.min.js"></script>
 
 </head>
-<body>
+<body></body>
 
 <script>
-    let belongs = [{shouji:"119",province:"安徽"},{shouji:"222",province:"北京"}];
-//    let belongs = [1, 2, 3, 4];
+    let v ={
+        name:"libai",
+        age: 10
+    };
+
+
+
+    /*let belongs = [{
+        shouji:"11122223333",
+        province: "安徽",
+        city: "安庆",
+        company: "电信CDMA卡",
+        cardtype: "",
+        areacode: "0556"
+    },{
+        shouji:"11122223334",
+        province: "安徽",
+        city: "安庆",
+        company: "电信CDMA卡",
+        cardtype: "",
+        areacode: "0556"
+    },{
+        shouji:"11122223335",
+        province: "安徽",
+        city: "安庆",
+        company: "电信CDMA卡",
+        cardtype: "",
+        areacode: "0556"
+    }];
+    console.log(JSON.stringify(belongs));
     $.ajax({
         type: "POST",
-        url: "http://localhost:8089/mall/belong.do",
-        //data: {belongs: belongs},
+        url: "http://47.94.46.28:8012/mall/belong.do",
+        //data: JSON.stringify(JSON.stringify(belongs)),
         data: JSON.stringify(belongs),
         dataType: "json",
         contentType : 'application/json;charset=utf-8', //设置请求头信息
         success: function (data) {
             console.log("post belongs success");
         }
-    })
+    })*/
+
 
 </script>
 </html>

@@ -29,12 +29,15 @@ public class Demo1 {
         Reader in = new FileReader("read.csv");
        /* CSVParser parse = CSVFormat.EXCEL.parse(in);
         Iterator<CSVRecord> iterator = parse.iterator();*/
-        Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+        Iterable<CSVRecord> records = CSVFormat.EXCEL
+                .withHeader("name", "age", "sex")
+                .parse(in);
         for (CSVRecord record : records) {
             //String lastName = record.get("Last Name");
             //String firstName = record.get("First Name");
             System.out.print(record.get(0) + "\t");
-            System.out.print(record.get(1));
+            System.out.print(record.get(1) +"\t");
+            System.out.println(record.get("sex"));
             System.out.println();
         }
     }
