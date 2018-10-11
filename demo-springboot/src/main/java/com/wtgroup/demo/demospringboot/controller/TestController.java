@@ -1,6 +1,9 @@
 package com.wtgroup.demo.demospringboot.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.juli.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2018-06-21-23:44
  */
 @RestController
-@Slf4j
 public class TestController {
+    private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @RequestMapping(value = "/postman",method = RequestMethod.GET)
     public String postMan(String name) {
