@@ -24,6 +24,7 @@ class MNode {
         this.meta = meta||'';
     }
 
+
     /**
      * 计算并获取最终的元数据文本, 用于存储Markdown原始文本内容.
      */
@@ -42,6 +43,12 @@ class MNode {
     }
 
 
+}
+
+class Paragraph extends MNode{
+    constructor(meta,parent){
+        super(null,meta,parent,null);
+    }
 }
 
 class MHead extends MNode {
@@ -74,5 +81,20 @@ class Blockquote extends MNode{
     }
 }
 
+let cid=-1;
+let incrId=function(){
+    return cid+=2;
+}
 
+$(function () {
+    const $meditor = $('.md_editor');
+
+
+    //页面加载动作
+    let p = new Paragraph('',null);
+    p.$el=$('<p cid="'+incrId()+'" mdtype="paragraph" contenteditable="true"></p>');
+    $meditor.append(p.$el);
+
+
+})
 
