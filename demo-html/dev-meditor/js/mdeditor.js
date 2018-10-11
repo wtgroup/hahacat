@@ -47,7 +47,7 @@ class MNode {
 
 class Paragraph extends MNode{
     constructor(meta,parent){
-        super(null,meta,parent,null);
+        super(null,meta,parent,ALL_MDTYPE);
     }
 }
 
@@ -88,12 +88,47 @@ let incrId=function(){
 
 $(function () {
     const $meditor = $('.md_editor');
-
+    let mNodeMap = new Map();
 
     //页面加载动作
-    let p = new Paragraph('',null);
-    p.$el=$('<p cid="'+incrId()+'" mdtype="paragraph" contenteditable="true"></p>');
-    $meditor.append(p.$el);
+    let para = new Paragraph('',null);
+    let cid = incrId();
+    para.$el=$('<p cid="'+ cid+'" mdtype="paragraph" contenteditable="true"></p>');
+    //添加到实例容器
+    mNodeMap.set(cid, para);
+    //添加到dom容器
+    $meditor.append(para.$el);
+    para.$el.on('input',function () {
+
+        let input = $(this).text();
+        console.log(input);
+
+        let headLikeReg=/^(#{1,6})\s+(.+)(?:\n|$)?/;
+        let m = headLikeReg.exec(input);
+        if (m) {
+            //几个#代表几级标题
+            let lvl = m[1].length;
+            let cnt = m[2];
+            let mHead = new MHead(lvl,cnt);
+            let cid = incrId();
+            let hn='h'+lvl;
+            mHead.$el = $('<'+hn + ' contenteditable="true" mdtype="head" cid="' + cid + '"></'+hn+'>');
+            mHead.$el.text(cnt);
+            //判断当前node是否允许含有head类型子节点
+            if (para.excludes.has(mHead.type)) {
+                //替换
+                para.$el.replaceWith(mHead.$el);
+                mNodeMap.delete(para);
+                mNodeMap.set(cid, mHead);
+                para = null;        //置空便于回收
+            }else{
+                //放入子节点数组中
+                para.children.push(mHead);
+            }
+
+        }
+
+    })
 
 
 })
