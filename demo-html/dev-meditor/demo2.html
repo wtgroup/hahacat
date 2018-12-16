@@ -14,7 +14,8 @@
     </style>
 </head>
 <body>
-<!--<div contenteditable="true"></div>-->
+<div contenteditable="true" id="txt"></div>
+<!--<textarea name="" id="txt" cols="30" rows="10"></textarea>-->
 
 <div class="md_editor">
 
@@ -29,7 +30,23 @@
 
 </body>
 <script>
+    $(function () {
+        $('#txt').on('input',function () {
+            //这两个属性只适合input, textarea
+            //console.log(this.selectionStart, this.selectionEnd);
+            let textbox = this;
+            let sel = window.getSelection();
+            let range = document.createRange();
+            //选择节点中的所有内容==全选
+            range.selectNodeContents(textbox);
+            //collapses the range to end
+            range.collapse(false);
+            sel.removeAllRanges();
+            //更新range
+            sel.addRange(range);
+        })
 
+    })
 
 </script>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="js/jquery-1.12.1.min.js"></script>
+
+</head>
+<body>
+<!--<div onmousedown="show_element(event)">-->
+<div onfocus="show_element(event)">
+<h1>this is a heading</h1>
+<p>这是段落
+    <span>重点加粗</span></p>
+<p>这又是一个段落</p>
+<img src="1.jpg"/>
+<div>
+    <p>p1</p>
+    <p>intreating</p>
+    <table><td>表格单元</td></table>
+</div>
+
+</div>
+</body>
+<script type="text/javascript">
+    /*
+    * 获取鼠标点击的元素
+    *
+    * 父元素绑定事件, 获取鼠标实际点击的子元素.
+    * Note: 类似td这类元素, 直接使用, 是不能成功获取的, 需要在 table 内部, 才有效.
+    * */
+    function show_element(e){
+        if(!e){
+            var e = window.event;
+        }
+        //获取事件点击元素
+        var targ = e.target;
+        //获取元素名称 / 大写的
+        var tname = targ.tagName;
+        //alert(tname);
+        alert(tname+" "+targ.innerText);
+    }
+</script>
+
+</html>

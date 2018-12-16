@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="js/lib/jquery-1.12.1.min.js"></script>
+    <script type="text/javascript" src="js/mdeditor2.js"></script>
+
+    <style>
+        .m_editor {
+            width: 600px;
+            height: 800px;
+            border: 1px dashed yellowgreen;
+            position: relative;
+            outline: 0;
+            cursor: text;
+        }
+        .m_editor .m_editor-blur{
+            opacity: 0.2;
+        }
+        .m_textarea {
+            position: absolute;
+            z-index: 0;
+            /*opacity: 0;*/
+            resize: none;
+            outline: none;
+            /*border: none;*/
+        }
+        .m_caret{
+            color:#000000;
+            z-index: 4;
+            position: absolute;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            border-left: 2px solid;
+            cursor: text;
+        }
+        /*[contenteditable="true"]{*/
+            /*border: 1px dashed grey;*/
+            /*height: 20px;*/
+        /*}*/
+        [mtype]{
+            border: 1px solid green;
+            caret-color: red;
+            /*caret-color: transparent;*/
+            height: 20px;
+        }
+        .cursor{
+
+        }
+    </style>
+</head>
+<body>
+<!--<div contenteditable="true" id="txt"></div>-->
+<!--<textarea name="" id="txt" cols="30" rows="10"></textarea>-->
+<div class="m_editor" tabindex="0" hidefocus="true" >
+<!--<div class="md_editor">-->
+
+    <!--<div class="cursor" style="width: 8px; height: 26px;display:none"></div>-->
+
+    <!--<p id='p1' contenteditable="true"style="height: 20px;border: 1px dashed grey"></p>-->
+
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+    $(function () {
+        $('#p1').focus();
+        $('#p1').on('click',function () {
+            console.log('click')
+        }).on('focus',function () {
+            console.log('focus')
+        }).on('input',function () {
+            console.log('input');
+        }).on('keyup',function () {
+            console.log('keyup');
+        }).on('keydown',function () {
+            console.log('keydown');
+        });
+    })
+
+</script>
+</html>
