@@ -6,7 +6,7 @@ const ALL_MDTYPE = new Set(["paragraph", "blockquote", "blockcode", "table", "he
 const LF = '\n';
 
 class MNode {
-    constructor(type, meta, parent, excludes) {
+    constructor(type, meta, parent, excludes, $el, context) {
         //md 类型, 不同的类型决定了将要dom结构
         this.type = type || 'paragraph';
         //父节点
@@ -22,6 +22,14 @@ class MNode {
         this.children = [];
         //元数据文本
         this.meta = meta || '';
+        //对应的jQuery节点
+        this.$el = $el;
+        //环境参数
+        this.context = context || {};
+        //前一个节点
+        //this.previous;
+        //后一个节点
+        //this.next;
     }
 
 
@@ -42,18 +50,92 @@ class MNode {
          }*/
     }
 
+    binding() {
+        let that = this;
+        let isPinyin = false;
+        let lastIsEmpty = false;
+        this.$el.on('compositionstart', function (e) {
+            console.log('compositionstart', this.innerText);
+            isPinyin = true;
+            console.log('compositionstart');
 
+        }).on('compositionend', function (e) {
+            console.log('compositionend', this.innerText);
+            //inputHandle($(this),that.context);
+            isPinyin = false
+        }).on('input', function (e) {
+            lastIsEmpty = this.innerText == '';
+            console.log('input', this.innerText);
+            if (!isPinyin) {
+                //inputHandle($(this),that.context);
+
+            }
+
+        }).on('keydown', function (e) {
+            console.log('keydown', e.keyCode);
+            let newBlock=false;
+            if (e.keyCode == 13) {      //回车键
+                e.preventDefault();
+                //TODO 光标所在位置直到该模块末尾的内容要剪切到新建的下方标签里
+                //当前块的内容子光标位置, 一分为二, 后部分剪切, new Paragraph()的内容
+                newBlock=true;
+            }
+            if (e.keyCode == 40) {      //方向下键
+                //内容不为空时, 才执行
+                if (this.innerText != '') {
+                    newBlock=true;
+
+                }
+            }
+            if(newBlock) {
+                inputHandle($(this),that.context);
+                that._initStubMNode(true);
+            }
+
+            //利用keyup在input事件之后, 且若回退没有内容后, 下次再回退就不会触发input
+            if (lastIsEmpty && (e.keyCode == 8 || e.keyCode == 46)) {
+                //=>上次input就已经空了, 本次按了Backspace/Delete
+                //删除本节点, 替换为P标签
+                if (!(that instanceof Paragraph)) {
+                    that._initStubMNode(false);
+                }
+
+            }
+
+        }).on('keyup', function (e) {
+            console.log('keyup', e.keyCode);
+        })
+    }
+
+    //初始化一个站位MNode, 目前等价于Paragraph
+    _initStubMNode(append) {
+        let that = this;
+        let cid = incrId();
+        let para = new Paragraph('', null, $('<p cid="' + cid + '" mdtype="paragraph" contenteditable="true"></p>'),
+            that.context);
+        if(append) {
+            that.$el.after(para.$el);
+            that.next = para;
+            that.context.mNodeMap.set(cid, para);
+        }else{
+            that.$el.replaceWith(para.$el);
+            //TODO 替换 that.context.mNodeMap.get(cid)
+        }
+        that.context.currentMNode = para;
+        para.$el.focus();
+        para.binding();
+    }
 }
 
 class Paragraph extends MNode {
-    constructor(meta, parent) {
-        super(null, meta, parent, ALL_MDTYPE);
+    constructor(meta, parent, $el, context) {
+        super('paragraph', meta, parent, ALL_MDTYPE, $el, context);
     }
 }
 
 class MHead extends MNode {
-    constructor(level, meta) {
-        super('head', meta, null, ALL_MDTYPE);
+    constructor(level, meta, $el, context) {
+        super('head', meta, null, ALL_MDTYPE, $el, context);
         //标题级别
         this.level = level || 1;
     }
@@ -65,6 +147,8 @@ class MHead extends MNode {
         }
         return m += ' ' + this.meta + LF;
     }
+
+
 }
 
 
@@ -82,8 +166,8 @@ class Blockquote extends MNode {
     }
 }
 
-//方法区
-function inputHandle($dom,currentMNode,mNodeMap) {
+//公共方法区
+function inputHandle($dom, context) {
     let input = $dom.text();
     console.log(input);
 
@@ -93,30 +177,48 @@ function inputHandle($dom,currentMNode,mNodeMap) {
         //几个#代表几级标题
         let lvl = m[1].length;
         let cnt = m[2];
-        let mHead = new MHead(lvl, cnt);
+        let mHead = new MHead(lvl, cnt, null, context);
         let cid = incrId();
         let hn = 'h' + lvl;
         mHead.$el = $('<' + hn + ' contenteditable="true" mdtype="head" cid="' + cid + '"></' + hn + '>');
         mHead.$el.text(cnt);
+        //绑定事件处理
+        // mHead.$el
+
         //判断当前node是否允许含有head类型子节点
-        if (currentMNode.excludes.has(mHead.type)) {
+        if (context.currentMNode.excludes.has(mHead.type)) {
             //替换
-            currentMNode.$el.replaceWith(mHead.$el);
+            context.currentMNode.$el.replaceWith(mHead.$el);
             //mHead.$el.focus();
-            moveCursorTo(mHead.$el,cnt.length);
-            mNodeMap.delete(currentMNode);
-            mNodeMap.set(cid, mHead);
-            currentMNode = null;        //置空便于回收
+            moveCursorToEnd(mHead.$el);
+            context.mNodeMap.delete(context.currentMNode);
+            context.mNodeMap.set(cid, mHead);
+            context.currentMNode = null;        //置空便于回收
         } else {
             //放入子节点数组中
-            currentMNode.children.push(mHead);
+            context.currentMNode.children.push(mHead);
         }
+        //
+        context.currentMNode = mHead;
+        mHead.binding();
 
     }
 }
 
-function moveCursorTo($dom,start){
-    $dom.focus();
+function moveCursorToEnd($dom) {
+
+    let textbox = $dom[0];
+    let sel = window.getSelection();
+    let range = document.createRange();
+    //选择节点中的所有内容==全选
+    range.selectNodeContents(textbox);
+    //collapses the range to end
+    range.collapse(false);
+    sel.removeAllRanges();
+    //更新range
+    sel.addRange(range);
+
+    /*$dom.focus();
     if(!start){
         //start = $dom.text().length;
         start = 0;
@@ -128,7 +230,7 @@ function moveCursorTo($dom,start){
         sel.select();
     } else if (typeof $dom[0].selectionStart == 'number' && typeof $dom[0].selectionEnd == 'number') {
         $dom[0].selectionStart = $dom[0].selectionEnd = start;
-    }
+    }*/
 
 }
 
@@ -140,32 +242,23 @@ let incrId = function () {
 }
 
 $(function () {
-    const $meditor = $('.md_editor');
-    let mNodeMap = new Map();
+    //存放所有上下文相关的需要变量
+    let context = {};
+    const $mEditor = $('.md_editor');
+    context.$mEditor = $mEditor;
+    context.mNodeMap = new Map();
 
     //页面加载动作
-    let para = new Paragraph('', null);
     let cid = incrId();
-    para.$el = $('<p cid="' + cid + '" mdtype="paragraph" contenteditable="true"></p>');
+    let para$el = $('<p cid="' + cid + '" mdtype="paragraph" contenteditable="true"></p>');
+    let para = new Paragraph('', null, para$el, context);
+    context.currentMNode = para;
     //添加到实例容器
-    mNodeMap.set(cid, para);
+    context.mNodeMap.set(cid, para);
     //添加到dom容器
-    $meditor.append(para.$el);
+    context.$mEditor.append(para.$el);
     para.$el.focus();       //添加到页面后, 聚焦才有效果
-    let isPinyin = false;
-    para.$el.on('compositionstart', function () {
-        isPinyin = true;
-        console.log('start');
-
-    }).on('compositionend', function () {
-        inputHandle($(this),para,mNodeMap);
-        isPinyin = false
-    }).on('input', function () {
-
-        if (!isPinyin) inputHandle($(this),para,mNodeMap);
-
-    })
-
+    para.binding();
 
 })
 

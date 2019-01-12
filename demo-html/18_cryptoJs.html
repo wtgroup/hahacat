@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <!--<script src="js/jsencrypt.js"></script>-->
+    <!--<script src="js/jsrsasign.js"></script>-->
+    <!--<script src="js/jf_jsencrypt.js"></script>-->
+    <script src="js/aes/aes.js"></script>
+    <script src="js/aes/pad-zeropadding.js"></script>
+
+</head>
+<body>
+<div id="write" contenteditable="true">
+    div
+    <span>我们</span>
+</div>
+
+
+</body>
+
+<script>
+    //--------------------------------------------------
+    var b64map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    var b64pad = "=";
+
+    function b64tob64u(a) {
+        a = a.replace(/\=/g, "");
+        a = a.replace(/\+/g, "-");
+        a = a.replace(/\//g, "_");
+        return a
+    }
+    function hextob64u(a) {
+        if (a.length % 2 == 1) {
+            a = "0" + a
+        }
+        return b64tob64u(hex2b64(a))
+    }
+
+
+    function hex2b64(d) {
+        var b;
+        var e;
+        var a = "";
+        for (b = 0; b + 3 <= d.length; b += 3) {
+            e = parseInt(d.substring(b, b + 3), 16);
+            a += b64map.charAt(e >> 6) + b64map.charAt(e & 63)
+        }
+        if (b + 1 == d.length) {
+            e = parseInt(d.substring(b, b + 1), 16);
+            a += b64map.charAt(e << 2)
+        } else {
+            if (b + 2 == d.length) {
+                e = parseInt(d.substring(b, b + 2), 16);
+                a += b64map.charAt(e >> 2) + b64map.charAt((e & 3) << 4)
+            }
+        }
+        if (b64pad) {
+            while ((a.length & 3) > 0) {
+                a += b64pad
+            }
+        }
+        return a
+    }
+
+    function hextouricmp(a) {
+        return a.replace(/(..)/g, "%$1")
+    }
+    function hextoutf8(a) {
+        return decodeURIComponent(hextouricmp(a))
+    }
+
+    //----------------------------------------------------------
+
+
+    let keyStr = "x4hnmkJR4Q9ZJxbf";
+    let key = CryptoJS.enc.Utf8.parse(keyStr);
+    let d = {iv: key, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding};
+
+    // let src = "haoyaiyo我们的大众要高旧0-7个老人更合理厚古薄今";
+    //
+    // // iv 借用 key
+    // var enc = CryptoJS.AES.encrypt(src, key, d);
+    // console.log(enc);
+    // console.log(enc.toString());        // toString 输出base64, 和Java一致, 引用了 jsrsasign 会输出16进制
+    //
+    // //console.log(enc.ciphertext.toString());      // 输出 16进制 字符
+    //
+    // var encStr = enc.toString();
+    // console.log("ok");
+    // encStr = b64tob64u(encStr);
+    // console.log(encStr);
+    //
+    // // js 解密 js
+    // //var dec = CryptoJS.AES.decrypt(encStr,key,d); // 这个encStr编码不对 导致后面解密后同String无法转成UTF-8格式, 报错: "Uncaught Error: Malformed UTF-8 data"
+    // var dec = CryptoJS.AES.decrypt(enc,key,d);
+    // //console.log(dec.toString(CryptoJS.enc.Utf8));
+    // console.log(dec);
+    // console.log(dec.toString(CryptoJS.enc.Utf8));
+    // //var decStr = dec.toString();
+    // //console.log(hextoutf8(dec.toString()));
+    // console.log(hextob64u(dec.toString()));;
+
+
+    // js 解密 java
+    // let javapln=
+    // "W5PyYxdzMJE87E6EiugzMDrsVcDhKuhV4zkj_VgDyAAYvS8SAHbAwH2-XhfOqnCzmRdQIgArzDMXuM1ekFjKYgKVFemFfYD1Jx3aApgVcsjclSWy850qYSsfBinjUvO_";
+    let javapln=
+        "W5PyYxdzMJE87E6EiugzMDrsVcDhKuhV4zkj/VgDyAAYvS8SAHbAwH2+XhfOqnCzmRdQIgArzDMXuM1ekFjKYgKVFemFfYD1Jx3aApgVcsjclSWy850qYSsfBinjUvO/";
+    let javaplnParse = CryptoJS.enc.Utf8.parse(javapln);
+    console.log(javaplnParse);
+    var dec4java = CryptoJS.AES.decrypt(javaplnParse,key,d);
+    console.log(dec4java);
+    console.log(dec4java.toString(CryptoJS.enc.Utf8));
+
+
+    // AES加密
+    // function getAESparameter(data) {
+    //     let str = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+    //     let arr = str.split("");
+    //     let aesKey = "";
+    //     for (var i = 0; i < 16; i++) {
+    //         aesKey += arr[Math.floor(Math.random() * arr.length)];
+    //     }
+    //     var key = CryptoJS.enc.Utf8.parse(aesKey);
+    //     console.log(aesKey);
+    //     //var plainText = JSON.stringify(data); // 明文
+    //     let plainText=data;
+    //
+    //     let contentText = CryptoJS.enc.Utf8.parse(plainText);
+    //     let encrypted = CryptoJS.AES.encrypt(contentText, key, {
+    //         mode: CryptoJS.mode.ECB,
+    //         padding: CryptoJS.pad.Pkcs7
+    //         //padding: CryptoJS.pad.pkcs5
+    //     });
+    //     let resultData = {
+    //         data: encrypted.toString(),
+    //         sessionKey: aesKey
+    //     };
+    //     return resultData;
+    // }
+    //
+    // let res = getAESparameter("haohaiyo");
+    // console.log(res);
+
+
+    // let s_pk = "-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyxQxnDmbP/FqGd4yf+fGmHINts1uA57H/uYibfvaJaoP2RxA0aLGSp3jZbsu4Ri5YD1msLY+sM4za9qzOs91aEsvEY8+7ABBVcJjfPhAZ71+qXQGPXGRIxY4rkrndW9Jvyw9DBg8W5CPvLVxeid2yVUdzkIP301CCCTcyCMzQcwIDAQAB-----END PUBLIC KEY-----";
+    // let c_priK = "-----BEGIN PRIVATE KEY-----MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALF0eTQ2v7pp4nLjrYnUaI79PSC7A6ef24SaZtyka08yCS+rZEvAdrKB7f7qdLuRoe0RvxtbpH8+p3qGzRS3GTfqRzPTIjiGWt3hgnXuRoSMfpd6NgC2HkWUHiUUK+CUBrxpvKOYeiTbceUk6sdczgF9f2lGp31DKASORLp25SYHAgMBAAECgYAvBEEoyGi8J1nMPu632gNp/0a26VXqj7xFwfMG+rlD3mn4q1yDhZbtbOd15wDOwaM5gL41rW5EGIGfQSANIQYZDQlMsHHXFWsBVLXPB+mZGVj26xSgrGqZr+I8txkexJv5b43/O5DX/r0BkRP3FvJU2iQ8pqEZy8YdVEttT7xngQJBAOsN2x72T2hXf5u7VZb4Z+mrNn+cF1GPqYxx+hzWxNrKkPQrvNMRjQyHbPs1ZCRMdllSHvAFw/2rgBEzO0JIt5ECQQDBRKTPytlDuY2Sob3U2TaZekRvfdgoTDv8aO4lTdPAY6a4CVdivw2kQ5KNSmipiRhQkTUvGCJoGsigFj//zigXAkEAjyxGbwqa/bRmPwaRsL6oFNW8AWijb4OxQ6HdNhm/mIFQX9oQTwRexOXshOtVjyKf5/I0dAEfC3GeNVveWZaPcQJAX4MRAC/7V2Dn+kM8kWgXd5nZIFBM9v1V19PzfTQNJdMZnXHgYciRcVCDqJfRSZebEJXydqeyuUgjRho43q5/WQJATvGl6UaPnMgeGZq2f+nQrsYuPOOulK11cHnFNT/n+Onil2LGfHYLIdNFGJ5qD32rCDYu3ss9t6tz5t0St8oVKQ==-----END PRIVATE KEY-----";
+    // let src = "好厉害90790uojlwode当我的大中国有案发gf ";
+    //
+    // // 加密
+    // // 读取解析pem格式的秘钥, 生成秘钥实例 (RSAKey)
+    // var s_pk_obj = KEYUTIL.getKey(s_pk);
+    // var enc = KJUR.crypto.Cipher.encrypt(src,s_pk_obj);
+    // console.log(hextob64u(enc));
+
+
+    // var jsEncrypt = new JSEncrypt();
+    // jsEncrypt.setPublicKey(pk);
+    // let enc = jsEncrypt.encrypt("好利来");
+    // console.log("enc:",enc);
+    // jsEncrypt.setPrivateKey(priK);
+    // let dec = jsEncrypt.decrypt(enc);
+    // console.log("dec:",dec);
+
+    // var jsEncrypt = new JSEncrypt();
+    // jsEncrypt.setPrivateKey(priK);
+    // var doPrivate = jsEncrypt.key.doPrivate(src);
+    // console.log(doPrivate);
+
+    // jsEncrypt.log=true;
+    // jsEncrypt.setPublicKey(priK);
+    // let enc = jsEncrypt.encryptByPrivateKey("好利来");
+    //
+    // console.log("enc:",enc);
+    // //jsEncrypt.setPrivateKey(priK);
+    //let dec = jsEncrypt.decrypt(enc);
+    // let dec = jsEncrypt.decryptByPublicKey(enc);
+    // console.log("dec:",dec);
+
+    // var sign = jsEncrypt.sign(src,KJUR.crypto.Util.sha1,"sha1");
+    // console.log(sign);
+    // var v = jsEncrypt.verify(src,sign,KJUR.crypto.Util.sha1);
+    // console.log(v);
+
+    //var sha1 = KJUR.crypto.Util.sha1("12345 what fuck ");
+    //console.log(sha1);
+
+
+    //let pubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWc5AJyqFagZadLcrX7sDphQM0t1sAKhVslbMyfMe5yWcfadNaQBY_z6v7zxB3gHsdsViLp5EdxjZNz0DNYh3ljYKWDTsqTsf9nx5rj18eKaT4PQZa0hFnJjNppcj2SlQsUdY6RqoiW9lJLKnL20UW9ndwS-Mr6YMFQyC00Qg73wIDAQAB";
+    // let pubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCjnGu4K23xQfwMFtenJfxZWB76jaYyNZT5Vg+0niwbAfXXzyYeyzpM4arg2QmpiWLF+cReXYNL4lv4d1t7soLHnQxoGe5Ycs06R1FPl98K6eZ7gGgrur9aMIE55cIzlMkW5SPr0nmAwLT8bh3X336grDja59EL3pvEHzhOxXaxMwIDAQAB";
+    // let pubKeyUrl = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCjnGu4K23xQfwMFtenJfxZWB76jaYyNZT5Vg-0niwbAfXXzyYeyzpM4arg2QmpiWLF-cReXYNL4lv4d1t7soLHnQxoGe5Ycs06R1FPl98K6eZ7gGgrur9aMIE55cIzlMkW5SPr0nmAwLT8bh3X336grDja59EL3pvEHzhOxXaxMwIDAQAB";
+    // // let b64str = "5ZOm546p5L2gJiheKihe5a6DNA";
+    // var decode = JSEncrypt.Base64.decode(pubKey);
+    // console.log(decode);
+    // console.log(JSEncrypt.Base64.decode(pubKey));
+    // var decodeUrlSafe = JSEncrypt.Base64.decodeUrlSafe(pubKeyUrl);
+    // console.log(decodeUrlSafe);
+    //
+    //
+    // let jsEncrypt = new JSEncrypt();
+    //
+    //
+    // jsEncrypt.setPublicKey(pubKey);
+    // let enc = jsEncrypt.encrypt("123456");
+    // console.log(enc);
+
+</script>
+
+</html>

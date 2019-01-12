@@ -1,13 +1,13 @@
 package com.wtgroup.demo.demospringboot.bean.vo;
 
 public enum Status{
-    SUCCESS(0,"success"){
+    SUCCESS(0,"SUCCESS"){
         //这里必须是外面有定义过的方法, 不然, 使用者调用不到
         public String abstractFun() {
             return "这是SUCCESS自己实现的abstractFun()";
         }
     },
-    ERROR(1,"error");
+    ERROR(1,"ERROR");
 
     private Integer code;
     private String msg;

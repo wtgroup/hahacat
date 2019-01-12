@@ -40,7 +40,7 @@ public class HttpAspect {
     }
 
     @After("log()")
-    public void doAfter() {     //around 之后, afterReturning之前 /  即使conroller中即使抛出异常, 这个仍然会得到执行, 打死都要执行的
+    public void doAfter() {     //around 之后, afterReturning之前 / Controller中即使抛出异常, 这个仍然会得到执行, 打死都要执行的
         System.out.println("after controller");
     }
 

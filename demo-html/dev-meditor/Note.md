@@ -66,3 +66,32 @@ blockquote>p
 
 `(.*?)`, ?表示尽可能少的匹配.
 `(?:\n|$)/)`, ?:表示此括号的内容不作为结果输出, 不会编号.
+
+
+> The Range.collapse() method collapses the Range to one of its boundary points.
+> 将访问折叠到边界位置.
+> A collapsed Range is empty, containing no content, specifying a single-point in a DOM tree. To determine if a 
+> Range is already collapsed, see the Range.collapsed property.
+
+
+```
+range.collapse(toStart);
+toStart Optional
+A boolean value: true collapses the Range to its start, false to its end. If omitted, it defaults to false .
+```
+
+这两个属性只适合input, textarea
+console.log(this.selectionStart, this.selectionEnd);
+
+
+```
+/*触发顺序:
+* 非拼音: keydown, input, keyup
+* 拼音: keydown,start,input,keyup,keydown,input,keyup... end
+* */
+
+```
+
+* `Enter`
+最先触发的地方preventDefault, `Enter`键只会触发keydown,keyup.
+回车时, input事件中e.keyCode==undisputed.

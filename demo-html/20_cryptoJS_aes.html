@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <!--<script src="js/jsencrypt.js"></script>-->
+    <!--<script src="js/jsrsasign.js"></script>-->
+    <!--<script src="js/jf_jsencrypt.js"></script>-->
+    <script src="js/aes/aes.js"></script>
+    <script src="js/aes/pad-zeropadding.js"></script>
+
+</head>
+<body>
+<div id="write" contenteditable="true">
+    <dvi>测试和java兼容性</dvi>
+</div>
+
+
+</body>
+
+<script>
+    //--------------------------------------------------
+    // var b64map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    // var b64pad = "=";
+    //
+    // function b64tob64u(a) {
+    //     a = a.replace(/\=/g, "");
+    //     a = a.replace(/\+/g, "-");
+    //     a = a.replace(/\//g, "_");
+    //     return a
+    // }
+    // function hextob64u(a) {
+    //     if (a.length % 2 == 1) {
+    //         a = "0" + a
+    //     }
+    //     return b64tob64u(hex2b64(a))
+    // }
+    //
+    //
+    // function hex2b64(d) {
+    //     var b;
+    //     var e;
+    //     var a = "";
+    //     for (b = 0; b + 3 <= d.length; b += 3) {
+    //         e = parseInt(d.substring(b, b + 3), 16);
+    //         a += b64map.charAt(e >> 6) + b64map.charAt(e & 63)
+    //     }
+    //     if (b + 1 == d.length) {
+    //         e = parseInt(d.substring(b, b + 1), 16);
+    //         a += b64map.charAt(e << 2)
+    //     } else {
+    //         if (b + 2 == d.length) {
+    //             e = parseInt(d.substring(b, b + 2), 16);
+    //             a += b64map.charAt(e >> 2) + b64map.charAt((e & 3) << 4)
+    //         }
+    //     }
+    //     if (b64pad) {
+    //         while ((a.length & 3) > 0) {
+    //             a += b64pad
+    //         }
+    //     }
+    //     return a
+    // }
+    //
+    // function hextouricmp(a) {
+    //     return a.replace(/(..)/g, "%$1")
+    // }
+    // function hextoutf8(a) {
+    //     return decodeURIComponent(hextouricmp(a))
+    // }
+
+    //----------------------------------------------------------
+
+
+    let keyStr = "x4hnmkJR4Q9ZJxbf";
+    let key = CryptoJS.enc.Utf8.parse(keyStr);
+    // let d = {iv: key, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding};
+    let d = {iv: key, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7};        // 可与 Pkcs5 兼容
+
+    let src = "haoyaiyo我们的大众要高旧0-7个老人更合理厚古薄今";
+    // let src = "haohaiyo";
+
+    // 加密
+
+    // iv 借用 key
+    var enc = CryptoJS.AES.encrypt(src, key, d);
+    console.log(enc);
+    console.log("js 加密: "+enc.toString());        // toString 输出base64, 和Java一致, 引用了 jsrsasign 会输出16进制
+
+    //console.log(enc.ciphertext.toString());      // 输出 16进制 字符
+
+    // 默认输出base64编码格式
+    var encStr = enc.toString();
+
+
+    // js 解密 js
+
+    //var dec = CryptoJS.AES.decrypt(encStr,key,d); // 这个encStr编码不对 导致后面解密后同String无法转成UTF-8格式, 报错: "Uncaught Error: Malformed UTF-8 data"
+    var dec = CryptoJS.AES.decrypt(encStr,key,d);
+    console.log(dec);
+    console.log(dec.toString(CryptoJS.enc.Utf8));
+
+
+
+    // js 解密 java
+    // let javapln=
+    // "W5PyYxdzMJE87E6EiugzMDrsVcDhKuhV4zkj_VgDyAAYvS8SAHbAwH2-XhfOqnCzmRdQIgArzDMXuM1ekFjKYgKVFemFfYD1Jx3aApgVcsjclSWy850qYSsfBinjUvO_";
+    let javapln=
+        "W5PyYxdzMJE87E6EiugzMDrsVcDhKuhV4zkj/VgDyAAYvS8SAHbAwH2+XhfOqnCzmRdQIgArzDMXuM1ekFjKYgKVFemFfYD1Jx3aApgVcsjclSWy850qYSsfBinjUvO/5zmfOCV6fRxlmtlucEzjKg";
+    // !若传入字符串, 则仅接收 base64 编码格式!
+    var dec4java = CryptoJS.AES.decrypt(javapln,key,d);
+    console.log(dec4java);
+    // 转为 utf8 字符
+    console.log(dec4java.toString(CryptoJS.enc.Utf8));
+
+
+
+
+    // AES加密
+    // function getAESparameter(data) {
+    //     let str = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+    //     let arr = str.split("");
+    //     let aesKey = "";
+    //     for (var i = 0; i < 16; i++) {
+    //         aesKey += arr[Math.floor(Math.random() * arr.length)];
+    //     }
+    //     var key = CryptoJS.enc.Utf8.parse(aesKey);
+    //     console.log(aesKey);
+    //     //var plainText = JSON.stringify(data); // 明文
+    //     let plainText=data;
+    //
+    //     let contentText = CryptoJS.enc.Utf8.parse(plainText);
+    //     let encrypted = CryptoJS.AES.encrypt(contentText, key, {
+    //         mode: CryptoJS.mode.ECB,
+    //         padding: CryptoJS.pad.Pkcs7
+    //         //padding: CryptoJS.pad.pkcs5
+    //     });
+    //     let resultData = {
+    //         data: encrypted.toString(),
+    //         sessionKey: aesKey
+    //     };
+    //     return resultData;
+    // }
+    //
+    // let res = getAESparameter("haohaiyo");
+    // console.log(res);
+
+
+</script>
+
+</html>

@@ -7,6 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.junit.Test;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -64,13 +65,36 @@ public class Demo1 {
         //final CSVPrinter printer = CSVFormat.DEFAULT.withHeader("H1", "H2").print(out);
         CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader("h1", "h2");
         csvFormat.printRecord(out,"baby","1");
+        //printer.printComment("zhushi??");
+//        printer.print(3);
+//        printer.print(6);
+//        printer.println();
+//        printer.print(9);
+//        printer.print(11);
 
         out.flush();
         out.close();
     }
 
     @Test
-    public void fun(){
+    public void fun3() throws IOException {
+        //读
+        FileReader in = new FileReader("D:\\Work\\Work\\JAVA\\JiuFu\\AntiFraudAPI\\Document\\一链数云文档\\电信近3个月消费金额均值--20181108 2.CSV");
+        CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader("seqnu", "mobile");
+        CSVParser records = csvFormat
+                .parse(in);
+        ArrayList<Object[]> tmp = new ArrayList<Object[]>();
+        for (CSVRecord record : records) {
+            tmp.add(new Object[]{record.get(0),record.get(1)});
+        }
+        //写
+        FileWriter out = new FileWriter("mobiles.csv");
+        //CSVPrinter printer = csvFormat.print(out);
+        for (Object[] r : tmp) {
+            csvFormat.printRecord(out,r);
+        }
+        out.flush();
+        out.close();
 
     }
 

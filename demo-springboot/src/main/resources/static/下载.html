@@ -5,12 +5,23 @@
     <title>文件上传测试</title>
 </head>
 <body>
-<form action="/upload" enctype="multipart/form-data"
-      method="post">
-    上传用户：<input type="text" name="username"><br/>
-    上传文件1：<input type="file" name="file1"><br/>
-    上传文件2：<input type="file" name="file2"><br/>
+<form action="/download" method="post"> <!--enctype="multipart/form-data"-->
+
+    <input type="text" name="fileName" value="xxxyyyzzz"><br/>
+
     <input type="submit" value="提交">
+
+    <hr>
+    <button onclick="ajaxDownload()">AjaxDownload</button>
 </form>
 </body>
+<script>
+    function ajaxDownload() {
+        var url = "http://localhost:8080/download";
+        var fileName = "testAjaxDownload.txt";
+        var form = $("<form></form>").attr("action", url).attr("method", "post");
+        form.append($("<input></input>").attr("type", "hidden").attr("name", "fileName").attr("value", fileName));
+        form.appendTo('body').submit().remove();
+    }
+</script>
 </html>
