@@ -1,6 +1,11 @@
 // console.log("7uojga-f-lj".match(/[\-_]/));
 // console.log("-fouotg9".indexOf(/[\-_]/));
 
+let priK = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALYyZJ24pspOtgKm8UDoJ8cK3BoHUvuXiWnizQFJB/sflMIBc33zRRmPKKQCybAKYVL9TonW0ChHzBN1xynbkuAyCUQWPVH2Y7wRgtQ2uAxspWeg0mn3Zf6KlG+aYTOuT00QQJgWmtzwetxOBTEF40gZuV59RS/8etQ/XDIyE9XfAgMBAAECgYBWLdnnvIqwELEI6hwdPnJqNJnNef9nX9MwkYW0gO3Ue6iqZ3NQdPwPTebERUlPCmnkjkpS6pfFJcjCv6f4BZMfylspzUS/D8+c8MM2dPyWQPBmQvV7NI0khO81rC+rO/0PwWtDRRaawYyCWtdKkePaOhKiLTm31lPGA1LoEzX+GQJBANkeT6mLlQg7bieceiTu8JS4uX4d8U09TWO5+fWsT6ThEuQIg1UWR0KuwO0hqpZK3XDWWePVi5taGAUhruTSn6MCQQDW0x60JA4r0RtP0IouTR2/LVuZThMvoJHAwgKG+UqCUEbBJDKVBec2TijxqyJE5XUoG4cVB/mJ9/HOhAzPbiSVAkEAiWqU0uMkPSSYMHvqFswf+pD73eWHnvJIs/C2UpZvhhRqB2eX79d83KiMNMmVFTBm/Q69r+StSnL4Nu89qVfhbwJAaDzY0SANoEU+s2PFKOJSZMllgOXZeWq4TofVIhkkhkbdjio6QQU0Q615QIqBfly4lFWHHjVYaBHfSw3YCW6wYQJBAJs6VaoRL+V+NYX5FlISEwnsDmalsoyqRidBTINaTGGZv6MkkIURbG8y6yjrNGV9hQWn1opxF1XRc6eL/D5Ypj4=";
+
+var jss = require("jsrsasign.js");
+var key = jss.KEYUTIL.getKey(priK);
+console.log(key);
 
 
 

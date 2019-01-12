@@ -8554,6 +8554,11 @@ function b64utos(a) {
     return BAtos(b64toBA(b64utob64(a)))
 }
 
+/**
+ * Base64 -> Base64 url safe
+ * @param a
+ * @returns {XML|string|*}
+ */
 function b64tob64u(a) {
     a = a.replace(/\=/g, "");
     a = a.replace(/\+/g, "-");
@@ -8574,6 +8579,11 @@ function b64utob64(a) {
     return a
 }
 
+/**
+ * Base64 Url Safe
+ * @param a
+ * @returns {XML|string|*}
+ */
 function hextob64u(a) {
     if (a.length % 2 == 1) {
         a = "0" + a
@@ -9369,6 +9379,11 @@ KJUR.crypto.Mac = function (d) {
         }
     }
 };
+/**
+ *
+ * @param {Object}o o.alg:算法名称; o.prov:支持的js文件标识; o.prvkeypem:pem格式秘钥(base64);
+ * @constructor
+ */
 KJUR.crypto.Signature = function (o) {
     var q = null;
     var n = null;
@@ -9441,6 +9456,7 @@ KJUR.crypto.Signature = function (o) {
             this.updateHex = function (v) {
                 this.md.updateHex(v)
             };
+            /**签名方法*/
             this.sign = function () {
                 this.sHashHex = this.md.digest();
                 if (typeof this.ecprvhex != "undefined" && typeof this.eccurvename != "undefined") {
@@ -9475,6 +9491,7 @@ KJUR.crypto.Signature = function (o) {
                 this.updateHex(v);
                 return this.sign()
             };
+            /**验签*/
             this.verify = function (v) {
                 this.sHashHex = this.md.digest();
                 if (typeof this.ecpubhex != "undefined" && typeof this.eccurvename != "undefined") {
@@ -9544,6 +9561,7 @@ KJUR.crypto.Signature = function (o) {
                 throw"both prvkeypem and prvkeypas parameters not supported"
             } else {
                 try {
+                try {   //获取key, 初始化 Signature 实例
                     var q = KEYUTIL.getKey(o.prvkeypem);
                     this.init(q)
                 } catch (m) {
@@ -9555,6 +9573,13 @@ KJUR.crypto.Signature = function (o) {
 };
 KJUR.crypto.Cipher = function (a) {
 };
+/**
+ *
+ * @param {String} e 明文
+ * @param {RSAKey} f 公钥
+ * @param {String} d 算法名称, 大写, 如 RSA, 缺省 RSA
+ * @returns {String} 16进制字符串
+ */
 KJUR.crypto.Cipher.encrypt = function (e, f, d) {
     if (f instanceof RSAKey && f.isPublic) {
         var c = KJUR.crypto.Cipher.getAlgByKeyAndName(f, d);
@@ -9575,10 +9600,10 @@ KJUR.crypto.Cipher.encrypt = function (e, f, d) {
 };
 /**
  *
- * @param e
- * @param {RSAKey} f
- * @param d
- * @returns {*}
+ * @param {String} e 16进制密文字符串
+ * @param {RSAKey} f 私钥
+ * @param {String} d 算法名称, 大写, 如 RSA, 缺省 RSA
+ * @returns {String} 明文
  */
 KJUR.crypto.Cipher.decrypt = function (e, f, d) {
     if (f instanceof RSAKey && f.isPrivate) {
@@ -10660,6 +10685,13 @@ var KEYUTIL = function () {
         },
     }
 }();
+/**
+ *
+ * @param l RSAKey / ECDSA / DSA / 标准的pem格式秘钥Base64字符
+ * @param k
+ * @param n
+ * @returns {*}
+ */
 KEYUTIL.getKey = function (l, k, n) {
     var G = ASN1HEX, L = G.getChildIdx, v = G.getV, d = G.getVbyList, c = KJUR.crypto, i = c.ECDSA, C = c.DSA,
         w = RSAKey, M = pemtohex, F = KEYUTIL;
@@ -10831,8 +10863,14 @@ KEYUTIL.getKey = function (l, k, n) {
     if (l.indexOf("-END ENCRYPTED PRIVATE KEY-") != -1) {
         return F.getKeyFromEncryptedPKCS8PEM(l, k)
     }
-    throw"not supported argument"
+    throw "not supported argument"
 };
+/**
+ *
+ * @param {String}a 算法名, 如 RSA
+ * @param {int}c 长度
+ * @returns {{}}
+ */
 KEYUTIL.generateKeypair = function (a, c) {
     if (a == "RSA") {
         var b = c;
@@ -10843,12 +10881,12 @@ KEYUTIL.generateKeypair = function (a, c) {
         var f = new RSAKey();
         var e = h.n.toString(16);
         var i = h.e.toString(16);
-        f.setPublic(e, i);
+        f.setPublic(e, i);      //(n,e)
         f.isPrivate = false;
         f.isPublic = true;
         var k = {};
-        k.prvKeyObj = h;
-        k.pubKeyObj = f;
+        k.prvKeyObj = h;    //私钥
+        k.pubKeyObj = f;    //公钥
         return k
     } else {
         if (a == "EC") {
@@ -12498,8 +12536,8 @@ KJUR.jws.JWSJS = function () {
     }
 };
 
-// Add by LJ
-exports=window;
+// Add by LJ , 方便测试
+var exports = window;
 
 exports.SecureRandom = SecureRandom;
 exports.rng_seed_time = rng_seed_time;
